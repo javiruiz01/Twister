@@ -14,6 +14,14 @@
         <servlet-name>Create</servlet-name>
         <servlet-class>servlet.user.Create</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddFriend</servlet-name>
+        <servlet-class>servlet.friend.AddFriend</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveFriend</servlet-name>
+        <servlet-class>servlet.friend.RemoveFriend</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -26,5 +34,13 @@
     <servlet-mapping>
         <servlet-name>Create</servlet-name>
         <url-pattern>/create</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFriend</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveFriend</servlet-name>
+        <url-pattern>/remove</url-pattern>
     </servlet-mapping>
 </web-app>

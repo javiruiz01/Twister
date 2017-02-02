@@ -37,12 +37,11 @@ public class Database {
             return (DriverManager.getConnection("jdbc:mysql://" + DBStatic.host + "/" + DBStatic.mysqlDB,
                     DBStatic.username, DBStatic.password));
         }
-//        else {
-//            if (database == null) {
-//                database = new Database("jdbc/db");
-//            }
-//            return (database.getConnection());
-//        }
-        return null;
+        else {
+            if (database == null) {
+                database = new Database("jdbc/db");
+            }
+            return (database.getConnection());
+        }
     }
 }

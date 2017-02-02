@@ -18,7 +18,6 @@ public class Create extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-//        Map<String, String[]> param = req.getParameterMap();
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
 

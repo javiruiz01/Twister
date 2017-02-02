@@ -133,7 +133,7 @@ public class UserTools {
 
             String hash = BCrypt.hashpw(passwd, BCrypt.gensalt(BCRYPT_COST));
 
-            String query = "INSERT INTO `introWeb`.`USER` (`name`, `lastName`, `login`, `passwd`) VALUES ( ?, ?, ?, ?)";
+            String query = "INSERT INTO USER (`name`, `lastName`, `login`, `passwd`) VALUES ( ?, ?, ?, ?)";
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, name);
             st.setString(2, lastName);
