@@ -7,24 +7,28 @@ import org.json.JSONObject;
  */
 public class LoginService {
 
-    public static JSONObject login (String login, String mdp) {
-        if ((login == null) || (mdp == null)) {
-            return serviceTools.ErrorTools.serviceRefused("wrong arguments", 0);
-        }
+    public static JSONObject login(String login, String mdp) {
+        if ((login == null) || (mdp == null))
+            return serviceTools.ErrorTools.serviceRefused("Wrong arguments", 0);
 
-        if (!serviceTools.UserTools.userExists(login)) {
+
+        if (!serviceTools.UserTools.userExists(login))
             return serviceTools.ErrorTools.serviceRefused("User inconnu", 1);
-        }
 
-        if (!serviceTools.UserTools.checkPass(login, mdp)) {
+
+        if (!serviceTools.UserTools.checkPass(login, mdp))
             return serviceTools.ErrorTools.serviceRefused("Mot de passe incorrect", 2);
-        }
 
-        if (!serviceTools.UserTools.userConnect(login, mdp)) {
+
+        int id_user = serviceTools.UserTools.getIdUser(login);
+        if (id_user < 0)
+            return serviceTools.ErrorTools.serviceRefused("Erreur au login", 4);
+
+        if (serviceTools.UserTools.userConnect(id_user))
             return serviceTools.ErrorTools.serviceRefused("User already connected", 3);
-        }
 
-        String key = serviceTools.UserTools.insertConnection(login);
+
+        String key = serviceTools.UserTools.insertSession(id_user, false);
 
         return serviceTools.ErrorTools.serviceAccepted(key);
 

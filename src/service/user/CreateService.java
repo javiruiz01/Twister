@@ -7,7 +7,7 @@ import org.json.JSONObject;
  */
 public class CreateService {
 
-    public static JSONObject Create (String login, String passwd, String name, String lastName) {
+    public static JSONObject Create(String name, String lastName, String login, String passwd) {
 
         if ((login == null) || (passwd == null) || (name == null) || (lastName == null))
             return serviceTools.ErrorTools.serviceRefused("Wrong parameters", 0);
@@ -15,9 +15,7 @@ public class CreateService {
         if (serviceTools.UserTools.userExists(login))
             return serviceTools.ErrorTools.serviceRefused("User already exists", 1);
 
-        // Il faut faire login directement?
-
-        if (!serviceTools.UserTools.insertUser(login, passwd, name, lastName))
+        if (!serviceTools.UserTools.insertUser(name, lastName, login, passwd))
             return serviceTools.ErrorTools.serviceRefused("User could not be inserted", 2);
 
         return serviceTools.ErrorTools.serviceAccepted(null);

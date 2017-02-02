@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+
 import org.json.JSONObject;
 
 /**
@@ -18,17 +19,13 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
 
         Map<String, String[]> param = req.getParameterMap();
-        resp.setContentType("text/plain");
+        resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();
 
-        String user = null;
-        String passwd = null;
-        if (param.containsKey("user") && param.containsKey("passwd")) {
-            user = req.getParameter("user");
-            passwd = req.getParameter("passwd");
-        }
+        String user = req.getParameter("user");
+        String passwd = req.getParameter("passwd");
 
         JSONObject response = service.user.LoginService.login(user, passwd);
+        out.println(response);
     }
 }
-

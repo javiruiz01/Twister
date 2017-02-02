@@ -18,22 +18,16 @@ public class Create extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        Map<String, String[]> param = req.getParameterMap();
+//        Map<String, String[]> param = req.getParameterMap();
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
 
-        String login = null;
-        String passwd = null;
-        String name = null;
-        String lastName = null;
-        if (param.containsKey("login") && param.containsKey("passwd") &&
-                param.containsKey("name") && param.containsKey("lastName")) {
-            login = req.getParameter("login");
-            passwd = req.getParameter("passwd");
-            name = req.getParameter("name");
-            lastName = req.getParameter("lastName");
-        }
+        String login = req.getParameter("login");
+        String passwd = req.getParameter("passwd");
+        String name = req.getParameter("name");
+        String lastName = req.getParameter("lastName");
 
-        JSONObject response = service.user.CreateService.Create(login, passwd, name, lastName);
+        JSONObject response = service.user.CreateService.Create(name, lastName, login, passwd);
+        out.println(response);
     }
 }

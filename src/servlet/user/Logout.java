@@ -22,11 +22,9 @@ public class Logout extends HttpServlet {
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
 
-        String key = null;
-        if (param.containsKey("key")) {
-            key = req.getParameter("key");
-        }
+        String key = req.getParameter("key");
 
         JSONObject response = service.user.LogoutService.logout(key);
+        out.println(response);
     }
 }

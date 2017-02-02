@@ -8,10 +8,10 @@ import org.json.JSONObject;
  */
 public class ErrorTools {
 
-    public static JSONObject serviceRefused (String message, int code) {
+    public static JSONObject serviceRefused(String message, int code) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("code", code).put("message",message);
+            obj.put("code", code).put("message", message);
         } catch (JSONException e) {
             e.printStackTrace();
         }

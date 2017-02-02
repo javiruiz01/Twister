@@ -9,7 +9,7 @@ import static serviceTools.UserTools.deleteConnection;
  */
 public class LogoutService {
 
-    public static JSONObject logout (String key) {
+    public static JSONObject logout(String key) {
 
         if (key == null)
             return serviceTools.ErrorTools.serviceRefused("wrong arguments", 0);
@@ -17,6 +17,6 @@ public class LogoutService {
         if (!deleteConnection(key))
             return serviceTools.ErrorTools.serviceRefused("User already disconnected", 2);
 
-        return serviceTools.ErrorTools.serviceAccepted(null);
+        return serviceTools.ErrorTools.serviceAccepted(key);
     }
 }
