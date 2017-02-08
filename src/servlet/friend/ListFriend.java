@@ -1,5 +1,6 @@
-package servlet.user;
+package servlet.friend;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,25 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 /**
- * Created by jruiz on 1/29/17.
+ * Created by jruiz on 2/7/17.
  */
-public class Create extends HttpServlet {
+public class ListFriend extends HttpServlet{
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        resp.setContentType("text/plain");
+        resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();
 
-        String login = req.getParameter("login");
-        String passwd = req.getParameter("passwd");
-        String name = req.getParameter("name");
-        String lastName = req.getParameter("lastName");
+        String from = req.getParameter("from");
 
-        JSONObject response = service.user.CreateService.Create(name, lastName, login, passwd);
+        JSONArray response = service.friend.ListFriendsService.listFriends(from);
         try {
             out.println(response.toString(1));
         } catch (JSONException e) {

@@ -1,5 +1,6 @@
 package serviceTools;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,17 +19,34 @@ public class ErrorTools {
         return obj;
     }
 
-    public static JSONObject serviceAccepted(String key) {
-
+    public static JSONObject serviceAcceptedLogin(String key) {
         JSONObject obj = new JSONObject();
         try {
-            if (key == null)
-                obj.put("code", 200).put("message", "OK").put("key", key);
-            else
-                obj.put("code", 200).put("message", "OK");
+             obj.put("code", 200).put("message", "OK").put("key", key);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return obj;
+    }
+
+    public static JSONObject serviceAcceptedEmpty() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("code", 200).put("message", "OK");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj;
+    }
+
+    public static JSONArray serviceRefusedList(String message, int code) {
+        JSONArray result = new JSONArray();
+        JSONObject obj = null;
+        try {
+            obj = new JSONObject().put("message", message).put("code", code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result.put(obj);
     }
 }

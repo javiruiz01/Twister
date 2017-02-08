@@ -1,7 +1,8 @@
-package servlet.friend;
+package servlet.message;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import service.message.AddMessageService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,22 +12,22 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Created by jruiz on 2/2/17.
+ * Created by jruiz on 2/7/17.
  */
-public class RemoveFriend extends HttpServlet {
+public class AddMessage extends HttpServlet{
 
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+    public void doGet (HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();
 
         String key = req.getParameter("key");
-        String to = req.getParameter("to");
+        String text = req.getParameter("text");
 
-        JSONObject response = service.friend.RemoveFriendService.removeFriend(key, to);
+        JSONObject result = AddMessageService.CreateMessage(key, text);
         try {
-            out.println(response.toString(1));
+            out.println(result.toString(1));
         } catch (JSONException e) {
             e.printStackTrace();
         }

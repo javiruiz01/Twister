@@ -1,4 +1,4 @@
-package DB;
+package BD;
 
 /**
  * Created by jruiz on 1/31/17.

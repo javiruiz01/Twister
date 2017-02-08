@@ -18,6 +18,6 @@ public class CreateService {
         if (!serviceTools.UserTools.insertUser(name, lastName, login, passwd))
             return serviceTools.ErrorTools.serviceRefused("User could not be inserted", 2);
 
-        return serviceTools.ErrorTools.serviceAccepted(null);
+        return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }
 }

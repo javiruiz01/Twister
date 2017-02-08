@@ -1,8 +1,13 @@
-package DB;
+package BD;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.Mongo;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -43,5 +48,19 @@ public class Database {
             }
             return (database.getConnection());
         }
+    }
+
+    public static DBCollection getMongoCollection() {
+        Mongo m = null;
+        DBCollection collection = null;
+        try {
+            m = new Mongo(MongoDBStatic.host, MongoDBStatic.port);
+            DB db = m.getDB(MongoDBStatic.database);
+//            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
+            collection = db.getCollection("messages");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return collection;
     }
 }

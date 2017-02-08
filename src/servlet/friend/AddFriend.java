@@ -1,5 +1,6 @@
 package servlet.friend;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -20,10 +21,14 @@ public class AddFriend extends HttpServlet{
         resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();
 
-        String from = req.getParameter("from");
+        String key = req.getParameter("key");
         String to = req.getParameter("to");
 
-        JSONObject response = service.friend.AddFriendService.addFriend(from, to);
-        out.println(response);
+        JSONObject response = service.friend.AddFriendService.addFriend(key, to);
+        try {
+            out.println(response.toString(1));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

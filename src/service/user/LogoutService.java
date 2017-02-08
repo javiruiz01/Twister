@@ -17,6 +17,6 @@ public class LogoutService {
         if (!deleteConnection(key))
             return serviceTools.ErrorTools.serviceRefused("User already disconnected", 2);
 
-        return serviceTools.ErrorTools.serviceAccepted(key);
+        return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }
 }

@@ -7,10 +7,13 @@ import org.json.JSONObject;
  */
 public class AddFriendService {
 
-    public static JSONObject addFriend (String from, String to) {
+    public static JSONObject addFriend(String key, String to) {
 
-        if ((from == null) || (to == null) || (from.equals(to)))
+        if ((key == null) || (to == null))
             return serviceTools.ErrorTools.serviceRefused("Wrong arguments", 0);
+
+        String from = serviceTools.UserTools.getUserFromKey(key);
+        System.out.println("KEY = " + from);
 
         // On prend les deux IDs pour pouvoir faire des querys a la table FRIEND
         int from_id = serviceTools.UserTools.getIdUser(from);
@@ -24,8 +27,8 @@ public class AddFriendService {
             return serviceTools.ErrorTools.serviceRefused("User " + to + " inconnu", 2);
 
         int to_id = serviceTools.UserTools.getIdUser(to);
-        if ((from_id  < 0) || (to_id < 0))
-            return serviceTools.ErrorTools.serviceRefused("Erreur dans la DB", 3);
+        if ((from_id < 0) || (to_id < 0))
+            return serviceTools.ErrorTools.serviceRefused("Erreur dans la BD", 3);
 
         // On voit si il est deja ami
         if (serviceTools.FriendTools.isFriend(from_id, to_id))
@@ -36,6 +39,6 @@ public class AddFriendService {
             return serviceTools.ErrorTools.serviceRefused("Erreur lors de l'ajout de l'amitie", 5);
 
 
-        return serviceTools.ErrorTools.serviceAccepted(null);
+        return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }
 }

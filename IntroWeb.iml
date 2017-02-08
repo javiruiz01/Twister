@@ -24,5 +24,6 @@
     <orderEntry type="library" name="java-json" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.18-bin" level="project" />
     <orderEntry type="library" name="jbcrypt-0.2" level="project" />
+    <orderEntry type="library" name="mongo-2.10.1" level="project" />
   </component>
 </module>

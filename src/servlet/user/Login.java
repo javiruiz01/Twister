@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -25,6 +26,10 @@ public class Login extends HttpServlet {
         String passwd = req.getParameter("passwd");
 
         JSONObject response = service.user.LoginService.login(user, passwd);
-        out.println(response);
+        try {
+            out.println(response.toString(1));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

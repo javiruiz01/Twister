@@ -1,5 +1,6 @@
 package servlet.user;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.servlet.ServletException;
@@ -25,6 +26,10 @@ public class Logout extends HttpServlet {
         String key = req.getParameter("key");
 
         JSONObject response = service.user.LogoutService.logout(key);
-        out.println(response);
+        try {
+            out.println(response.toString(1));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

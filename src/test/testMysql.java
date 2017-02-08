@@ -12,7 +12,7 @@ public class testMysql {
 
     public static void main(String[] args) {
         try {
-            Connection conn = DB.Database.getMySQLConnection();
+            Connection conn = BD.Database.getMySQLConnection();
 
             // On cree un nouveau user
             serviceTools.UserTools.insertUser("miriam", "dominguez", "mdominguez", "123");
