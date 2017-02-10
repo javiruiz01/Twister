@@ -70,7 +70,7 @@ public class FriendTools {
         ArrayList result = new ArrayList();
         try {
             Connection conn = BD.Database.getMySQLConnection();
-            String query = "SELECT * FROM FRIEND WHERE id_from = ?";
+            String query = "SELECT id_to FROM FRIEND WHERE id_from = ?";
             PreparedStatement st = conn.prepareStatement(query);
             st.setInt(1, from);
             ResultSet rs = st.executeQuery();
@@ -99,6 +99,24 @@ public class FriendTools {
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static JSONArray searchFriend(String login) {
+        JSONArray result = new JSONArray();
+        try {
+            Connection conn = BD.Database.getMySQLConnection();
+            String query = "SELECT id FROM USER WHERE name LIKE ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, login);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                JSONObject userInfo = serviceTools.UserTools.getUserInfo(rs.getInt("id"));
+                result.put(userInfo);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;

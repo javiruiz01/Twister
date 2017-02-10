@@ -17,6 +17,7 @@ import java.sql.SQLException;
  */
 public class Database {
 
+    public static Mongo m = null;
     private DataSource dataSource;
     private static Database database;
 
@@ -41,8 +42,7 @@ public class Database {
             }
             return (DriverManager.getConnection("jdbc:mysql://" + DBStatic.host + "/" + DBStatic.mysqlDB,
                     DBStatic.username, DBStatic.password));
-        }
-        else {
+        } else {
             if (database == null) {
                 database = new Database("jdbc/db");
             }
@@ -51,16 +51,19 @@ public class Database {
     }
 
     public static DBCollection getMongoCollection() {
-        Mongo m = null;
+
         DBCollection collection = null;
-        try {
-            m = new Mongo(MongoDBStatic.host, MongoDBStatic.port);
-            DB db = m.getDB(MongoDBStatic.database);
-//            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
-            collection = db.getCollection("messages");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        if (m == null) {
+            try {
+                m = new Mongo(MongoDBStatic.host, MongoDBStatic.port);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
         }
+        DB db = m.getDB(MongoDBStatic.database);
+//            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
+        collection = db.getCollection("messages");
         return collection;
+
     }
 }

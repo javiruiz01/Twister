@@ -10,21 +10,30 @@ import java.sql.Statement;
  */
 public class testMysql {
 
+//    public static void main(String[] args) {
+//        try {
+//            Connection conn = BD.Database.getMySQLConnection();
+//
+//            // On cree un nouveau user
+//            serviceTools.UserTools.insertUser("miriam", "dominguez", "mdominguez", "123");
+//
+//            String query = "SELECT * FROM USER";
+//            Statement st = conn.createStatement();
+//            ResultSet rs = st.executeQuery(query);
+//            while (rs.next()) {
+//                System.out.println("USER: " + rs.getString("login"));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     public static void main(String[] args) {
-        try {
-            Connection conn = BD.Database.getMySQLConnection();
+        serviceTools.UserTools.insertUser("javier", "ruiz", "jruiz", "123");
+        serviceTools.UserTools.insertUser("beatriz", "sanchez", "bsanchez", "123");
+        serviceTools.UserTools.insertUser("javier", "revillas", "jrevillas", "123");
+        serviceTools.UserTools.insertUser("rama", "samb", "rsamb", "123");
 
-            // On cree un nouveau user
-            serviceTools.UserTools.insertUser("miriam", "dominguez", "mdominguez", "123");
 
-            String query = "SELECT * FROM USER";
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
-            while (rs.next()) {
-                System.out.println("USER: " + rs.getString("login"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

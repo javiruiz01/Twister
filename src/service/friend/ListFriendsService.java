@@ -26,7 +26,6 @@ public class ListFriendsService {
             JSONObject friend = serviceTools.FriendTools.createJSON((int) friends.get(i));
             friends_json.put(friend);
         }
-
         return friends_json;
     }
 }

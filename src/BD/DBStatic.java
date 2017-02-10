@@ -9,5 +9,9 @@ public interface DBStatic {
     String mysqlDB = "introWeb";
     String username = "root";
     String password = "sandsand";
+//    String host = "132.227.201.129:3306";
+//    String mysqlDB = "gr1_ruiz_samb";
+//    String username = "gr1_ruiz_samb";
+//    String password = "rs1";
     boolean mysql_pooling = false;
 }

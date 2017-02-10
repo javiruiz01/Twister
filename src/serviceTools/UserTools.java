@@ -1,5 +1,7 @@
 package serviceTools;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mindrot.BCrypt;
 
 import java.sql.*;
@@ -164,4 +166,45 @@ public class UserTools {
         }
         return result;
     }
+
+    public static int getIdUserFromKey (String key) {
+        int result = -1;
+        try {
+            Connection conn = BD.Database.getMySQLConnection();
+            String query = "SELECT USER.id FROM USER, SESSION WHERE SESSION.session_key = ? AND USER.id = SESSION.id";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, key);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                result = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static JSONObject getUserInfo (int id_user) {
+        JSONObject result = new JSONObject();
+        try {
+            Connection conn = BD.Database.getMySQLConnection();
+            String query = "SELECT name, lastName, login FROM USER WHERE id = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id_user);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                try {
+                    result.put("name", rs.getString("name"))
+                            .put("lastName", rs.getString("lastName"))
+                            .put("login", rs.getString("login"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

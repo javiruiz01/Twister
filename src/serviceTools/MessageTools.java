@@ -2,7 +2,10 @@ package serviceTools;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -10,8 +13,6 @@ import org.json.JSONObject;
  * Created by jruiz on 2/7/17.
  */
 public class MessageTools {
-
-    public static int id = 0;
 
     public static JSONObject createMessageJSON(String text, String author, int author_id) {
 
@@ -24,8 +25,6 @@ public class MessageTools {
         obj.put("author", author);
         obj.put("date", new java.util.GregorianCalendar().getTime());
         obj.put("text", text);
-        obj.put("comment_id", id);
-        id += 1;
 
         collection.insert(obj);
 
@@ -36,6 +35,30 @@ public class MessageTools {
             e.printStackTrace();
         }
 
+        return result;
+    }
+
+    public static JSONArray ListUserMessages(int author_id) {
+        JSONArray result = new JSONArray();
+
+        DBCollection collection = BD.Database.getMongoCollection();
+        BasicDBObject obj = new BasicDBObject();
+        obj.put("author_id", author_id);
+        DBCursor cursor = collection.find(obj);
+
+        while(cursor.hasNext()) {
+            try {
+                DBObject object = cursor.next();
+                JSONObject message = new JSONObject()
+                        .put("author_id", object.get("author_id"))
+                        .put("author", object.get("author"))
+                        .put("date", object.get("date"))
+                        .put("text", object.get("text"));
+                result.put(message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         return result;
     }
 }
