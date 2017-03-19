@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twister</title>
+    <link rel="stylesheet" href="./index.css"/>
+    <script type="text/javascript" src="index.js"></script>
+    <link rel="icon" type="image" href="./favicon.ico">
+</head>
+<body>
+<header>
+    <div class="wrapper">
+        <a class="logo" href="...">
+            <img src="logo.png" alt="Twister_logo" class="logo">
+        </a>
+        <input id="search" type="text" name="Search" placeholder="Search Twister..."/>
+        <!--<a href="..." class="btn" role="button">-->
+            <!--<img class="avatar-circle" src="./user.jpg" alt="profile">-->
+        <!--</a>-->
+        <input id="logout" type="submit" value="logout"/>
+    </div>
+</header>
+<div class="wrapper-content" id="page-container">
+    <div class="dashboard-left">
+        <div class="profile-card">
+            <a class="dashboard-left-image" href="...">
+                <img class="dashboard-left-image" src="0ZfOasx5_bigger.jpg">
+            </a>
+            <div class="dashboard-left-user-info">
+                <a class="user-name" href="...">Javier Ruiz</a>
+                <span class="user-login">@javiruiz06</span>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="tweet-box">
+            <h1>Post your Twist!</h1>
+            <p>
+                <form method="POST" action="...">
+                    <textarea name="text" class="tweet-text"></textarea>
+                    <input class="new_tweet" type="submit" value="Tweet">
+                </form>
+            </p>
+        </div>
+        <div class="twists-stream">
+            <div class="twist" id="message1">
+                <div class="message-header">
+                    <a class="username" href="...">Javier Ruiz Calle</a>
+                    <small class="login"> @javiruiz06</small>
+                    <small class="time"> 8m</small>
+                </div>
+                <div class="message-content">
+                    <p>My first tweet</p>
+                </div>
+                <input class="comments" id="comments-message-1" value="View comments" type="submit"/>
+            </div>
+            <div class="twist" id="message2">
+                <div class="message-header">
+                    <a class="username" href="...">Rama Samb</a>
+                    <small class="login"> @ramasamb</small>
+                    <small class="time"> 15m</small>
+                </div>
+                <div class="message-content">
+                    <p>My first tweet</p>
+                </div>
+                <input class="comments" id="comments-message-2" value="View comments" type="submit"/>
+            </div>
+        </div>
+    </div>
+    <div class="dashboard-right">
+        <div class="comments-stream">
+            <div class="comments-header">
+                <h3>Comments: </h3>
+            </div>
+            <div class="twist-for-comment" id="comment-twist">
+                <div class="message-header">
+                    <a class="username" href="...">Javier Ruiz Calle</a>
+                    <small class="time"> 8m</small>
+                </div>
+                <div class="message-content">
+                    <p>My first tweet</p>
+                </div>
+            </div>
+            <div class="comment" id="comment1">
+                <div class="message-header">
+                    <a class="comment-username" href="..."> Rama Samb</a>
+                    <small class="time"> 15m</small>
+                </div>
+                <div class="comment-content">
+                    <p>Hi there, this is my first comment :)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

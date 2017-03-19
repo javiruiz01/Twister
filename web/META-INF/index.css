@@ -1,0 +1,301 @@
+html {
+    font-family: "Helvetica Neue";
+}
+
+*:focus {
+    outline: none;
+}
+
+body {
+    background-color: #F5F8FA;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    cursor: auto;
+    color: #000000;
+}
+
+p {
+    padding: 0 24px;
+    margin: 14px 0;
+}
+
+h1 {
+    /*border-bottom: 1px solid;*/
+    margin: 5px 0;
+    font-weight: normal;
+    font-size: 20px;
+    padding: 13px 14px;
+    height: 23px;
+}
+
+h3 {
+    margin: 5px 0;
+    font-weight: normal;
+    /*font-size: 20px;*/
+    padding: 13px 20px;
+    height: 23px;
+}
+
+input {
+    top: 10px;
+    width: 236px;
+    height: 50px;
+    border: 1px solid #D2D2D2;
+    border-radius: 5px;
+    padding: 0 10px;
+    font-size: 17px;
+}
+
+/* <header> */
+header {
+    height: 85px;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.wrapper {
+    width: 80%;
+    margin: auto;
+}
+
+div.wrapper {
+    padding: 11px 0;
+}
+
+img.logo {
+    float: left;
+    height: 50px;
+    width: 50px;
+    position: relative;
+    top: 10px;
+    margin: 0 15px 0 0;
+}
+
+img.avatar-circle {
+    float: left;
+    height: 50px;
+    width: 50px;
+    position: relative;
+    top: 10px;
+    margin: 0 15px 0 0;
+}
+
+input#logout {
+    margin-top: 10px;
+    float: right;
+}
+
+input#search {
+    margin-top: 10px;
+    border-radius: 21px;
+}
+
+input[type="submit"] {
+    background-color: #009EF6;
+    height: 50px;
+    border: 1px solid;
+    border-radius: 5px;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0 20px;
+    cursor: pointer;
+}
+
+img.avatar-circle {
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+/* </header> */
+
+/* 3 divs */
+div.wrapper-content {
+    width: 80%;
+    margin: auto;
+    display: flex;
+}
+
+div.dashboard-left {
+    float: left;
+    width: 20%;
+}
+
+div.main {
+    margin: 0 auto;
+    width: 40%;
+}
+
+div.dashboard-right {
+    float: right;
+    width: 20%;
+}
+
+/* New Tweet */
+div.tweet-box {
+    border: 1px;
+    background: #E6F5FE;
+    margin: 0 auto;
+    margin-top: 15px;
+    border-radius: 5px 5px 0 0;
+    padding: 9px 12px;
+    font-size: 14px;
+}
+
+textarea {
+    border-radius: 5px;
+    width: 95%;
+    padding: 10px;
+    min-height: 50px;
+    display: block;
+    resize: none;
+}
+
+input.new_tweet {
+    background: #2E9BC5;
+}
+
+input.new_tweet {
+    margin-top: 15px;
+    width: 40%;
+    display: block;
+}
+
+/* Twist stream */
+
+div.twists-stream {
+    border: 1px;
+    position: relative;
+}
+
+.time {
+    color: #657786;
+}
+
+.login {
+    color: #657786;
+}
+
+.login::before {
+    content: "\00b7"
+}
+
+.time::before {
+    content: "\00b7"
+}
+
+div.twist {
+    background-color: #FFFFFF;
+    min-height: 50px;
+    font-size: 14px;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 9px 12px;
+}
+
+input.comments {
+    margin-bottom: 5px;
+    background: #009EF6;
+    color: #FFFFFF;
+    width: 100%;
+    height: 25px;
+    font-size: 12px;
+}
+
+div.message-header {
+    display: block;
+    font-size: 16px;
+}
+
+a.username {
+    font-weight: bold;
+    color: #14171a;
+}
+
+/* Comments */
+div.comments-stream {
+    margin-top: 15px;
+    border: 1px;
+    position: relative;
+}
+
+div.comments-header {
+    background-color: #FFFFFF;
+    border: 1px;
+    position: relative;
+    font-weight: 300;
+    display: block;
+    /*line-height: 22px;*/
+    font-size: 18px;
+    color: #66757f;
+    border-bottom: 1px solid #e6ecf0;
+    border-radius: 5px 5px 0 0;
+}
+
+div.twist-for-comment {
+    background-color: #FFFFFF;
+    min-height: 50px;
+    font-size: 14px;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 9px 12px;
+}
+
+div.comment {
+    background-color: #FFFFFF;
+    min-height: 50px;
+    font-size: 14px;
+    border-bottom: 1px solid #e6ecf0;
+    padding: 9px 12px;
+}
+
+a.comment-username {
+    color: #000000;
+}
+
+div.comment-content {
+    position: center;
+}
+
+.comment-username::before {
+    padding-left: 14px;
+    content: "  \21B3"
+}
+
+/* User dashboard*/
+div.profile-card {
+    margin-top:15px;
+    background-color: #FFFFFF;
+    font-size: 14px;
+    border-radius: 5px 5px 5px 5px;
+    height:190px;
+}
+
+img.dashboard-left-image {
+    padding-top: 20px;
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+a.user-name {
+    text-align: center;
+    font-size: 18px;
+    color: #66757f;
+    font-weight: 300;
+    display: block;
+    padding-top: 14px;
+}
+
+span.user-login {
+    text-align: center;
+    font-size: 18px;
+    color: #66757f;
+    font-weight: 300;
+    display: block;
+    padding-top: 12px;
+}
