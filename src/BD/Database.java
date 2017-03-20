@@ -50,9 +50,9 @@ public class Database {
         }
     }
 
-    public static DBCollection getMongoCollection() {
+    public static DBCollection getMongoCollection(String collection_name) {
 
-        DBCollection collection = null;
+        DBCollection collection;
         if (m == null) {
             try {
                 m = new Mongo(MongoDBStatic.host, MongoDBStatic.port);
@@ -62,7 +62,7 @@ public class Database {
         }
         DB db = m.getDB(MongoDBStatic.database);
 //            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
-        collection = db.getCollection("messages");
+        collection = db.getCollection(collection_name);
         return collection;
 
     }

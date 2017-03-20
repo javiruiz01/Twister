@@ -1,6 +1,7 @@
 package service.message;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Created by jruiz on 2/8/17.

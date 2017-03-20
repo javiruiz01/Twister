@@ -29,11 +29,23 @@ public class testMysql {
 //    }
 
     public static void main(String[] args) {
-        serviceTools.UserTools.insertUser("javier", "ruiz", "jruiz", "123");
-        serviceTools.UserTools.insertUser("beatriz", "sanchez", "bsanchez", "123");
-        serviceTools.UserTools.insertUser("javier", "revillas", "jrevillas", "123");
-        serviceTools.UserTools.insertUser("rama", "samb", "rsamb", "123");
+        serviceTools.UserTools.insertUser("javier", "ruiz", "jruiz1", "123");
+        serviceTools.UserTools.insertUser("beatriz", "sanchez", "bsanchez1", "123");
+        serviceTools.UserTools.insertUser("javier", "revillas", "jrevillas1", "123");
+        serviceTools.UserTools.insertUser("rama", "samb", "rsamb1", "123");
 
+        Connection conn = null;
+        try {
+            conn = BD.Database.getMySQLConnection();
+            String query = "SELECT * FROM USER";
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                System.out.println("USER: " + rs.getString("login"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }

@@ -60,14 +60,16 @@ public class FriendTools {
             st.setInt(2, to);
             if (st.executeUpdate() > 0)
                 result = true;
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    public static ArrayList getFriends(int from) {
-        ArrayList result = new ArrayList();
+    public static ArrayList<Integer> getFriends(int from) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
         try {
             Connection conn = BD.Database.getMySQLConnection();
             String query = "SELECT id_to FROM FRIEND WHERE id_from = ?";
@@ -77,6 +79,9 @@ public class FriendTools {
             while (rs.next()) {
                 result.add(rs.getInt("id_to"));
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -96,6 +101,9 @@ public class FriendTools {
                         .put("lastName", rs.getString("lastName"))
                         .put("login", rs.getString("login"));
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -116,6 +124,9 @@ public class FriendTools {
                 JSONObject userInfo = serviceTools.UserTools.getUserInfo(rs.getInt("id"));
                 result.put(userInfo);
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

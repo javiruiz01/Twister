@@ -1,8 +1,5 @@
 package service.message;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -19,15 +16,11 @@ public class ListFriendMessagesService {
 
         int user_id = serviceTools.UserTools.getIdUserFromKey(key);
 
-        ArrayList friends = serviceTools.FriendTools.getFriends(user_id);
+        ArrayList<Integer> friends = serviceTools.FriendTools.getFriends(user_id);
+        friends.add(user_id);
 
-        JSONArray friendsMessages = new JSONArray();
+        JSONArray result = serviceTools.MessageTools.ListFriendMessages(friends);
 
-        for (int i = 0; i < friends.size(); i++) {
-            friendsMessages.put(serviceTools.MessageTools.ListUserMessages((int)friends.get(i)));
-        }
-        friendsMessages.put(serviceTools.MessageTools.ListUserMessages((int)friends.get(user_id)));
-
-        return friendsMessages;
+        return result;
     }
 }

@@ -161,6 +161,9 @@ public class UserTools {
             while (rs.next()) {
                 result = rs.getString("login");
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -178,6 +181,9 @@ public class UserTools {
             while (rs.next()) {
                 result = rs.getInt("id");
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -201,6 +207,9 @@ public class UserTools {
                     e.printStackTrace();
                 }
             }
+            rs.close();
+            st.close();
+            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
