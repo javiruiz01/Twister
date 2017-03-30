@@ -29,10 +29,10 @@ public class testMysql {
 //    }
 
     public static void main(String[] args) {
-        serviceTools.UserTools.insertUser("javier", "ruiz", "jruiz1", "123");
-        serviceTools.UserTools.insertUser("beatriz", "sanchez", "bsanchez1", "123");
-        serviceTools.UserTools.insertUser("javier", "revillas", "jrevillas1", "123");
-        serviceTools.UserTools.insertUser("rama", "samb", "rsamb1", "123");
+        serviceTools.UserTools.insertUser("javier", "ruiz", "jruiz1",  "email","123");
+        serviceTools.UserTools.insertUser("beatriz", "sanchez", "bsanchez1", "email", "123");
+        serviceTools.UserTools.insertUser("javier", "revillas", "jrevillas1",  "email", "123");
+        serviceTools.UserTools.insertUser("rama", "samb","rsamb1", "email", "123");
 
         Connection conn = null;
         try {

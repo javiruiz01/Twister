@@ -1,5 +1,6 @@
 package servlet.message;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import service.message.AddCommentService;
 
@@ -24,6 +25,12 @@ public class AddComment extends HttpServlet {
         Integer message_id = Integer.valueOf(req.getParameter("message_id"));
 
         JSONObject result = AddCommentService.CreateComment(key, text, message_id);
+
+        try {
+            out.println(result.toString(1));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 }

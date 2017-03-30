@@ -30,12 +30,12 @@ public class MessageTools {
         obj.put("text", text);
         collection.insert(obj);
 
-        JSONObject result = null;
-        try {
-            result = new JSONObject(JSON.serialize(obj));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        JSONObject result = new JSONObject();
+//        try {
+//            result = new JSONObject(JSON.serialize(obj));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
 
         return result;
     }
@@ -43,7 +43,7 @@ public class MessageTools {
     public static Object getNextSequence(String name) {
         DBCollection collection = BD.Database.getMongoCollection("index");
 
-        BasicDBObject query =  new BasicDBObject("_id", name);
+        BasicDBObject query = new BasicDBObject("_id", name);
         BasicDBObject update = new BasicDBObject("$inc", new BasicDBObject("seq", 1));
 
         DBObject result = collection.findAndModify(query, update);
@@ -51,7 +51,7 @@ public class MessageTools {
     }
 
     public static JSONObject createCommentJSON(String text, String author, int author_id, Integer message_id) {
-        DBCollection collection = BD.Database.getMongoCollection("comments");
+        DBCollection collection = BD.Database.getMongoCollection("messages");
 
         BasicDBObject obj = new BasicDBObject();
 
@@ -61,7 +61,13 @@ public class MessageTools {
         obj.put("date", new java.util.GregorianCalendar().getTime());
         obj.put("text", text);
         obj.put("message_id", message_id);
-        collection.insert(obj);
+
+        BasicDBObject comment = new BasicDBObject("comments", obj);
+
+        BasicDBObject query = new BasicDBObject("id", message_id);
+        BasicDBObject update = new BasicDBObject("$push", comment);
+
+        collection.update(query, update);
 
         JSONObject result = null;
         try {
@@ -80,13 +86,14 @@ public class MessageTools {
         obj.put("author_id", author_id);
         DBCursor cursor = collection.find(obj);
 
-        while(cursor.hasNext()) {
+        while (cursor.hasNext()) {
             try {
                 DBObject object = cursor.next();
                 JSONObject message = new JSONObject()
                         .put("author_id", object.get("author_id"))
                         .put("author", object.get("author"))
                         .put("date", object.get("date"))
+                        .put("id", object.get("id"))
                         .put("text", object.get("text"));
                 result.put(message);
             } catch (JSONException e) {
@@ -96,7 +103,7 @@ public class MessageTools {
         return result;
     }
 
-    public static JSONArray ListFriendMessages(ArrayList friends) {
+    public static JSONArray ListFriendMessages(ArrayList friends, Integer id_max, Integer id_min, Integer nb) {
         ArrayList<BasicDBObject> list = new ArrayList<BasicDBObject>();
 
         for (int i = 0; i < friends.size(); i++) {
@@ -106,11 +113,20 @@ public class MessageTools {
         }
         BasicDBObject query = new BasicDBObject();
         query.put("$or", list);
+        if (id_max != -1 || id_min != -1) {
+            BasicDBObject delimiter = new BasicDBObject();
+            if (id_max != -1)
+                delimiter.put("$lte", id_max);
+            if (id_min != -1)
+                delimiter.put("$gte", id_min);
+            query.put("id", delimiter);
+        }
 
         DBCollection collection = BD.Database.getMongoCollection("messages");
 
         DBCursor cursor = collection.find(query);
         cursor.sort(new BasicDBObject("date", -1));
+        cursor.limit(nb);
 
         JSONArray result = new JSONArray();
 
@@ -118,10 +134,16 @@ public class MessageTools {
             DBObject friend = cursor.next();
             try {
                 JSONObject friends_mongo = new JSONObject()
+                        .put("message_id", friend.get("id"))
                         .put("author_id", friend.get("author_id"))
                         .put("author", friend.get("author"))
                         .put("date", friend.get("date"))
                         .put("text", friend.get("text"));
+                if (friend.get("comments") != null) {
+                    friends_mongo.put("comments", friend.get("comments"));
+                }
+                JSONObject userInfo = serviceTools.UserTools.getUserInfo((Integer) friend.get("author_id"));
+                friends_mongo.put("name", userInfo.get("name")).put("lastname", userInfo.get("lastName"));
                 result.put(friends_mongo);
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -24,7 +24,8 @@ public class ListFriend extends HttpServlet{
 
         String from = req.getParameter("from");
 
-        JSONArray response = service.friend.ListFriendsService.listFriends(from);
+//        JSONArray response = service.friend.ListFriendsService.listFriends(from);
+        JSONObject response = service.friend.ListFriendsService.listFriends(from);
         try {
             out.println(response.toString(1));
         } catch (JSONException e) {

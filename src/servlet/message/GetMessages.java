@@ -11,14 +11,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * Created by jruiz on 2/8/17.
+ * Created by jruiz on 3/26/17.
  */
-public class ListFriendMessages extends HttpServlet {
+public class GetMessages extends HttpServlet {
 
-    public void doGet (HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
 
-        resp.setContentType("text/json");
+        resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
 
         String key = req.getParameter("key");
@@ -28,7 +28,7 @@ public class ListFriendMessages extends HttpServlet {
         Integer id_min = Integer.valueOf(req.getParameter("id_min"));
         Integer nb = Integer.valueOf(req.getParameter("nb"));
 
-        JSONArray response = service.message.ListFriendMessagesService.ListFriendMessages(key, query, from, id_max, id_min, nb);
+        JSONArray response = service.message.GetMessagesService.GetMessages(key, query, from, id_max, id_min, nb);
         try {
             out.println(response.toString(1));
         } catch (JSONException e) {

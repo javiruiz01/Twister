@@ -251,6 +251,10 @@ a.username {
     color: #14171a;
 }
 
+a#username-twist {
+    font-size:14px;
+}
+
 /* Comments */
 div.comments-stream {
     margin-top: 15px;
@@ -327,6 +331,7 @@ div.profile-card {
 }
 
 img.dashboard-left-image {
+    width: 73px;
     padding-top: 20px;
     display: block;
     margin-left: auto;

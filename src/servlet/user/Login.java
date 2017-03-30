@@ -19,17 +19,13 @@ public class Login extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        resp.setContentType("text/json");
+        resp.setContentType("text");
         PrintWriter out = resp.getWriter();
 
         String user = req.getParameter("user");
         String passwd = req.getParameter("passwd");
 
         JSONObject response = service.user.LoginService.login(user, passwd);
-        try {
-            out.println(response.toString(1));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        out.println(response);
     }
 }

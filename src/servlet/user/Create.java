@@ -22,12 +22,15 @@ public class Create extends HttpServlet {
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
 
+        // TODO: Add email and re_passwd
+
         String login = req.getParameter("login");
+        String email = req.getParameter("email");
         String passwd = req.getParameter("passwd");
         String name = req.getParameter("name");
         String lastName = req.getParameter("lastName");
 
-        JSONObject response = service.user.CreateService.Create(name, lastName, login, passwd);
+        JSONObject response = service.user.CreateService.Create(name, lastName, email, login, passwd);
         try {
             out.println(response.toString(1));
         } catch (JSONException e) {

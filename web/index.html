@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twister</title>
+    <link rel="stylesheet" href="./web/login.css"/>
+    <link rel="stylesheet" href="./web/register.css"/>
+    <link rel="stylesheet" href="./web/index.css"/>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="./web/javascript_mine.js"></script>
+    <script type="text/javascript" src="./web/jquery.appear.js"></script>
+</head>
+<body onload="javascript:init()">
+<div class="wrapper-login">
+    <div class="login">
+        <h1>Log into your account</h1>
+        <form class="login-form" name="login_form" onSubmit="login(this)" action="javascript:(function(){})()">
+            <input type="text" name="user_login" placeholder="Username">
+            <input type="password" name="user_password" placeholder="Password">
+            <input type="submit" placeholder="Connection" class="login-submit">
+        </form>
+        <div class="login-help">
+            <a href="javascript:makeRegisterPanel()">Register</a> - <a href="#">Forgot Password</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

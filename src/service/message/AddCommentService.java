@@ -18,9 +18,8 @@ public class AddCommentService {
         if (author_id < 0)
             return serviceTools.ErrorTools.serviceRefused("Erreur dans la BD", 2);
 
-
-
-
-        return null;
+        JSONObject result = serviceTools.MessageTools.createCommentJSON(text, author, author_id, message_id);
+        
+        return result;
     }
 }

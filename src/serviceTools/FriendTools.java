@@ -88,28 +88,28 @@ public class FriendTools {
         return result;
     }
 
-    public static JSONObject createJSON(int user) {
-        JSONObject result = new JSONObject();
-        try {
-            Connection conn = BD.Database.getMySQLConnection();
-            String query = "SELECT name, lastName, login FROM USER WHERE id = ?";
-            PreparedStatement st = conn.prepareStatement(query);
-            st.setInt(1, user);
-            ResultSet rs = st.executeQuery();
-            while (rs.next()) {
-                result.put("name", rs.getString("name"))
-                        .put("lastName", rs.getString("lastName"))
-                        .put("login", rs.getString("login"));
+    public static JSONArray createListFriendsId (ArrayList<Integer> friends) {
+        JSONArray friends_json = new JSONArray();
+
+        for (Object friend: friends) {
+            try {
+                JSONObject friend_json = new JSONObject().put("id", friend);
+                friends_json.put(friend_json);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            rs.close();
-            st.close();
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }
+        return friends_json;
+    }
+
+    public static JSONObject createObjectFriendsId (ArrayList<Integer> friends) {
+        JSONObject friends_json = null;
+        try {
+            friends_json = new JSONObject().put("id", friends);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return result;
+        return friends_json;
     }
 
     public static JSONArray searchFriend(String login) {

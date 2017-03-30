@@ -14,6 +14,23 @@ public class UserTools {
 
     private static final int BCRYPT_COST = 10;
 
+    public static boolean userExistsFromId(Integer id) {
+        boolean result = false;
+        try {
+            Connection conn = BD.Database.getMySQLConnection();
+            String query = "SELECT * FROM USER WHERE id = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            result = rs.next();
+            st.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static boolean userExists(String name) {
         boolean result = false;
         try {
@@ -125,7 +142,7 @@ public class UserTools {
         return result;
     }
 
-    public static boolean insertUser(String name, String lastName, String login, String passwd) {
+    public static boolean insertUser(String name, String lastName, String login, String email, String passwd) {
 
         boolean result = false;
         try {
@@ -133,12 +150,13 @@ public class UserTools {
 
             String hash = BCrypt.hashpw(passwd, BCrypt.gensalt(BCRYPT_COST));
 
-            String query = "INSERT INTO USER (`name`, `lastName`, `login`, `passwd`) VALUES ( ?, ?, ?, ?)";
+            String query = "INSERT INTO USER (`name`, `lastName`, `login`, `email`, `passwd`) VALUES ( ?, ?, ?, ?, ?)";
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, name);
             st.setString(2, lastName);
             st.setString(3, login);
-            st.setString(4, hash);
+            st.setString(4, email);
+            st.setString(5, hash);
             int res = st.executeUpdate();
             if (res > 0)
                 result = true;

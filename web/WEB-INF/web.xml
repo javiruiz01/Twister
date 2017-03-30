@@ -42,6 +42,14 @@
         <servlet-name>SearchFriend</servlet-name>
         <servlet-class>servlet.friend.SearchFriend</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddComment</servlet-name>
+        <servlet-class>servlet.message.AddComment</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetMessages</servlet-name>
+        <servlet-class>servlet.message.GetMessages</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -57,7 +65,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddFriend</servlet-name>
-        <url-pattern>/add</url-pattern>
+        <url-pattern>/addfriend</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>RemoveFriend</servlet-name>
@@ -65,15 +73,15 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListFriends</servlet-name>
-        <url-pattern>/list</url-pattern>
+        <url-pattern>/friends</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AddMessage</servlet-name>
-        <url-pattern>/comment</url-pattern>
+        <url-pattern>/addmessage</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListUserMessages</servlet-name>
-        <url-pattern>/messages</url-pattern>
+        <url-pattern>/list_messages</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ListFriendMessages</servlet-name>
@@ -82,5 +90,13 @@
     <servlet-mapping>
         <servlet-name>SearchFriend</servlet-name>
         <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddComment</servlet-name>
+        <url-pattern>/addcomment</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetMessages</servlet-name>
+        <url-pattern>/messages</url-pattern>
     </servlet-mapping>
 </web-app>
