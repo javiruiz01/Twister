@@ -64,6 +64,5 @@ public class Database {
 //            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
         collection = db.getCollection(collection_name);
         return collection;
-
     }
 }

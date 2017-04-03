@@ -7,6 +7,9 @@ function init() {
     });
     env.msgs = new Set();
     env.photo = "./web/default_profile.png";
+    env.id_max = 0;
+    env.id_min = 0;
+    env.selected_twist = 0;
 }
 
 function msg(id, author, name, lastname, text, date, comments) {
@@ -34,7 +37,7 @@ function msg(id, author, name, lastname, text, date, comments) {
             "   <div class=\"message-content\">" +
             "       <p>" + this.text + "</p>" +
             "   </div>" +
-            "   <input class=\"comments\" id=\"comments-message-1\" value=\"View comments\" type=\"submit\"/>" +
+            "   <input class=\"comments\" id=\"" + this.id + "\" value=\"View comments\" type=\"submit\" onclick=\"showComments(this.id, this.name, this.lastname, this.date)\"/>" +
             "</div>";
         return msg_html;
     }
@@ -257,8 +260,8 @@ function makeMainPanel() {
     var html =
         "<header>" +
         "   <div class=\"wrapper\">" +
-        "       <a class=\"logo\" href=\"...\">" +
-        "           <img src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
+        "           <img onclick=\"javascript:getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
         "       </a>" +
         "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search Twister...\"/>" +
         "       <input id=\"logout\" type=\"submit\" value=\"logout\" onclick=\"javascript:logout()\"/>" +
@@ -267,8 +270,8 @@ function makeMainPanel() {
         "   <div class=\"wrapper-content\" id=\"page-container\">" +
         "       <div class=\"dashboard-left\">" +
         "           <div class=\"profile-card\">" +
-        "               <a class=\"dashboard-left-image\" href=\"...\">" +
-        "                   <img class=\"dashboard-left-image\" src=\"" + env.photo + "\">" +
+        "               <a class=\"dashboard-left-image\" action=\"javascript:(function(){})()\">" +
+        "                   <img class=\"dashboard-left-image\" src=\"" + env.photo + "\" onclick=\"makeUserPanel(-1)\">" +
         "               </a>" +
         "               <div class=\"dashboard-left-user-info\">" +
         "                   <a class=\"user-name\" href=\"...\">" + env.name + " " + env.lastname + "</a>" +
@@ -294,8 +297,8 @@ function makeMainPanel() {
         "           <div class=\"comments-stream\">" +
         "               <div class=\"comments-header\">" +
         "                   <h3>Comments: </h3>" +
-        "                   <form class=\"add-comment\" id=\"message-for-comment-id\">" +
-        "                       <textarea name=\"text\" class=\"add-comment\" placeholder=\"Add your own!\" form=\"message-for-comment-id\"></textarea>" +
+        "                   <form name=\"new_comment_form\" class=\"add-comment\" id=\"message-for-comment-id\" action=\"javascript:(function(){})()\" onsubmit=\"newComment()\">" +
+        "                       <textarea name=\"new_comment_text\" class=\"add-comment\" placeholder=\"Add your own!\" form=\"message-for-comment-id\"></textarea>" +
         "                       <input class=\"new-comment\" type=\"submit\" value=\"Comment on this twist!\">" +
         "                   </form>" +
         "               </div>" +
@@ -363,8 +366,15 @@ function getInitialMessagesResponse(rep) {
         var html = '';
         for (var i = 0; i < rep.length; i++) {
             var obj = rep[i];
+            console.log("OBJ.MESSAGE_ID = " + obj.message_id);
             if (obj.message_id == undefined) {
                 continue; // TODO: Erase this when all the messages have ids
+            }
+            if (parseInt(obj.message_id) > env.id_max) {
+                env.id_max = obj.message_id;
+            }
+            if (parseInt(obj.message_id) < env.id_min) {
+                env.id_min = obj.message_id;
             }
             if (obj.comments != undefined) {
                 env.msgs[obj.message_id] = new msg(obj.message_id, obj.author,
@@ -396,7 +406,7 @@ function newTwistFormError(message) {
     console.log("[ERROR] = " + code);
     var html =
         "<div id=\"newTwistError\" style=\"color: red;\">" +
-        "   <p>" + errorMessage + "</p>" +
+        "   <p>" + message + "</p>" +
         "</div>";
     var oldMessage = $("errorRegister");
     if (oldMessage.length == 0) {
@@ -408,6 +418,7 @@ function newTwistFormError(message) {
 
 function newTwistConnection(text) {
     console.log("Attempting to post new message");
+    $(".tweet-text").val('');
     $.ajax({
         type: "GET",
         url: "addmessage",
@@ -423,9 +434,177 @@ function newTwistConnection(text) {
     })
 }
 
-function newTwistResponse (rep) {
+function newTwistResponse(rep) {
     console.log("Handling response from server");
     if (rep.error == undefined) {
-
+        env.id_max = rep.message_id;
+        refreshMessages()
     }
 }
+
+function refreshMessages() {
+    $.ajax({
+        type: "GET",
+        url: "messages",
+        dataType: "json",
+        data: "key=" + env.key + "&from=-1" + "&id_max=" + env.id_max + "&id_min=" + env.id_min + "&nb=10",
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("ERROR:\n" + JSON.stringify(jqXHR));
+            console.log("AJAX Error: " + textStatus + ":" + errorThrown);
+        },
+        success: function (rep) {
+            getInitialMessagesResponse(rep);
+        }
+    });
+}
+
+function showComments(twist_id, name, lastname, date) {
+    env.selected_twist = twist_id;
+    console.log("Printing comments.");
+    var d = new Date();
+    var minutes = d.getMinutes() - env.msgs[twist_id].date.toLocaleString();
+    var html_twist =
+        "<div class=\"message-header\">" +
+        "   <a class=\"username\" href=\"...\">" + env.msgs[env.selected_twist].author + "</a>" +
+        "   <small class=\"time\"> " + minutes + "m</small>" +
+        "</div>" +
+        "<div class=\"message-content\">" +
+        "   <p>" + env.msgs[twist_id].text + "</p>" +
+        "</div>";
+    // $(".twist-for-comment").html(html_twist);
+    console.log("Fetching comments from environment");
+    // var html_comment = "";
+    for (var i = 0; i < env.msgs[twist_id].comments.length; i++) {
+        minutes = d.getMinutes() - env.msgs[twist_id].comments[i].date;
+        html_twist +=
+            "<div class=\"comment\" id=\"comment" + env.msgs[twist_id].comments[i].id + "\">" +
+            "   <div class=\"message-header\">" +
+            "       <a class=\"comment-username\" href=\"...\"> @" + env.msgs[twist_id].comments[i].author + "</a>" +
+            "       <small class=\"time\"> " + minutes + "m</small>" +
+            "   </div>" +
+            "   <div class=\"comment-content\">" +
+            "       <p>" + env.msgs[twist_id].comments[i].text + "</p>" +
+            "   </div>" +
+            "</div>";
+    }
+
+    $(".twist-for-comment").html(html_twist);
+}
+
+function newComment() {
+    var text = document.new_comment_form.new_comment_text.value;
+    if (text.length > 140) {
+        newCommentError("Comment is too long");
+    }
+    newCommentConnection(text);
+}
+
+function newCommentError(message) {
+    console.log(message);
+    console.log("[ERROR] = " + code);
+    var html =
+        "<div id=\"newCommentError\" style=\"color: red;\">" +
+        "   <p>" + message + "</p>" +
+        "</div>";
+    var oldMessage = $("errorComment");
+    if (oldMessage.length == 0) {
+        $(".comments_stream").prepend(html);
+    } else {
+        oldMessage.replaceWith(html);
+    }
+}
+
+function newCommentConnection(text) {
+    console.log("Sending comment info to server");
+    $(".new_comment_text").val('');
+    $.ajax({
+        type: "GET",
+        url: "addcomment",
+        dataType: "json",
+        data: "key=" + env.key + "&text=" + text + "&message_id=" + parseInt(env.selected_twist),
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log("ERROR:\n" + JSON.stringify(jqXHR));
+            console.log("AJAX Error: " + textStatus + ":" + errorThrown);
+        },
+        success: function(rep) {
+            newCommentResponse(rep);
+        }
+    });
+}
+
+function newCommentResponse(rep) {
+    console.log("Creating html for new comment");
+    var d = new Date();
+    var message_date = new Date(rep.date.toLocaleString());
+    var minutes = d.getMinutes() - message_date;
+    var html_comment =
+        "<div class=\"comment\" id=\"comment" + env.selected_twist + "\">" +
+        "   <div class=\"message-header\">" +
+        "       <a class=\"comment-username\" href=\"...\"> @" + rep.author + "</a>" +
+        "       <small class=\"time\"> " + minutes + "m</small>" +
+        "   </div>" +
+        "   <div class=\"comment-content\">" +
+        "       <p>" + rep.text + "</p>" +
+        "   </div>" +
+        "</div>";
+    env.msgs[env.selected_twist].comments.push(rep);
+    $(".twist-for-comment").append(html_comment);
+}
+
+function getUserPanel() {
+    console.log("Creating user panel");
+    var html =
+        "<header>" +
+        "   <div class=\"wrapper\">" +
+        "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
+        "           <img onclick=\"javascript:getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "       </a>" +
+        "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search Twister...\"/>" +
+        "       <input id=\"logout\" type=\"submit\" value=\"logout\" onclick=\"javascript:logout()\"/>" +
+        "   </div>" +
+        "</header>" +
+        "   <div class=\"wrapper-content\" id=\"page-container\">" +
+        "       <div class=\"dashboard-left\">" +
+        "           <div class=\"profile-card\">" +
+        "               <a class=\"dashboard-left-image\" action=\"javascript:(function(){})()\">" +
+        "                   <img class=\"dashboard-left-image\" src=\"" + env.photo + "\" onclick=\"makeUserPanel(-1)\">" +
+        "               </a>" +
+        "               <div class=\"dashboard-left-user-info\">" +
+        "                   <a class=\"user-name\" href=\"...\">" + env.name + " " + env.lastname + "</a>" +
+        "                   <span class=\"user-login\">@" + env.login + "</span>" +
+        "               </div>" +
+        "           </div>" +
+        "       </div>" +
+        "       <div class=\"main\">" +
+        "           <div class=\"tweet-box\">" +
+        "               <h1 class=\"post-twist\">Post your Twist!</h1>" +
+        "               <p>" +
+        "                   <form name=\"new_twist_form\" action=\"javascript:(function(){})()\" onsubmit=\"newTwist()\">" +
+        "                       <textarea name=\"new_twist_text\" class=\"tweet-text\" placeholder=\"What's happening?\"></textarea>" +
+        "                       <input class=\"new_tweet\" type=\"submit\" value=\"Twist\">" +
+        "                   </form>" +
+        "               </p>" +
+        "           </div>" +
+        "           <div class=\"twists-stream\">" +
+
+        "           </div>" +
+        "       </div>" +
+        "       <div class=\"dashboard-right\">" +
+        "           <div class=\"comments-stream\">" +
+        "               <div class=\"comments-header\">" +
+        "                   <h3>Comments: </h3>" +
+        "                   <form name=\"new_comment_form\" class=\"add-comment\" id=\"message-for-comment-id\" action=\"javascript:(function(){})()\" onsubmit=\"newComment()\">" +
+        "                       <textarea name=\"new_comment_text\" class=\"add-comment\" placeholder=\"Add your own!\" form=\"message-for-comment-id\"></textarea>" +
+        "                       <input class=\"new-comment\" type=\"submit\" value=\"Comment on this twist!\">" +
+        "                   </form>" +
+        "               </div>" +
+        "           <div class=\"twist-for-comment\" id=\"comment-twist\">" +
+
+        "           </div>" +
+        "       </div>" +
+        "   </div>" +
+        "</div>";
+    $("body").html(html);
+}
+
+

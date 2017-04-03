@@ -14,13 +14,14 @@ body {
 
 a {
     text-decoration: none;
-    cursor: auto;
+    cursor: pointer;
     color: #000000;
 }
 
 p {
     padding: 0 24px;
     margin: 14px 0;
+    word-wrap: break-word;
 }
 
 h1 {
@@ -308,6 +309,7 @@ a.comment-username {
 
 div.comment-content {
     position: center;
+    word-wrap: break-word;
 }
 
 .comment-username::before {

@@ -30,12 +30,12 @@ public class MessageTools {
         obj.put("text", text);
         collection.insert(obj);
 
-        JSONObject result = new JSONObject();
-//        try {
-//            result = new JSONObject(JSON.serialize(obj));
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        JSONObject result = null;
+        try {
+            result = new JSONObject().put("message_id", obj.get("id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return result;
     }
