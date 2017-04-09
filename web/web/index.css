@@ -355,5 +355,65 @@ span.user-login {
     color: #66757f;
     font-weight: 300;
     display: block;
-    padding-top: 12px;
+    padding: 14px 0px 14px;
+}
+
+/*Follow button*/
+input.follow_user_button {
+    margin-bottom: 5px;
+    background: #009EF6;
+    color: #FFFFFF;
+    width: 100%;
+    height: 30px;
+    font-size: 12px;
+}
+
+input.follow_user_button:hover {
+    text-shadow: 0 1px rgba(0,0,0,0.3);
+    background-color: #357ae8;
+}
+
+/*Loader*/
+.loader {
+    border: 16px solid white;
+    border-top: 16px solid #009EF6; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    margin-top: 14px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/*Remove button*/
+input.remove_button_msg {
+    float: right;
+    width: 100px;
+    height: 30px;
+    background: white;
+    color: #657786;
+    border: 0px;
+    padding-left: 50px;
+    padding-bottom: 10px;
+}
+
+input.remove_button_msg:hover {
+    background-color: white;
+    text-shadow: none;
+}
+
+/*Footer*/
+footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    background-color: white;
+    text-align: center;
 }

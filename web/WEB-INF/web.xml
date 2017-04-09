@@ -50,6 +50,10 @@
         <servlet-name>GetMessages</servlet-name>
         <servlet-class>servlet.message.GetMessages</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RemoveMessage</servlet-name>
+        <servlet-class>servlet.message.RemoveMessage</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
@@ -98,5 +102,9 @@
     <servlet-mapping>
         <servlet-name>GetMessages</servlet-name>
         <url-pattern>/messages</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveMessage</servlet-name>
+        <url-pattern>/removemessage</url-pattern>
     </servlet-mapping>
 </web-app>

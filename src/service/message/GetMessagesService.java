@@ -9,8 +9,8 @@ import java.util.ArrayList;
  */
 public class GetMessagesService {
 
-    public static JSONArray GetMessages (String key, String query,
-                                         Integer from, Integer id_max, Integer id_min, Integer nb) {
+    public static JSONArray GetMessages(String key, String query,
+                                        Integer from, Integer id_max, Integer id_min, Integer nb) {
 
 
         if ((key == null) || (from == null) || (id_max == null) || (id_min == null) || (nb == null))
@@ -21,18 +21,19 @@ public class GetMessagesService {
         if (!serviceTools.UserTools.userConnect(user_id))
             return serviceTools.ErrorTools.serviceRefusedList("User is not connected", 1);
 
-        if (serviceTools.UserTools.userExistsFromId(from))
-            return serviceTools.ErrorTools.serviceRefusedList("User does not exist", 2);
-
+        if (from != -1) {
+            if (!serviceTools.UserTools.userExistsFromId(from))
+                return serviceTools.ErrorTools.serviceRefusedList("User does not exist", 2);
+        }
         if (query == null)
             System.out.println("Continuing without query, no problem");
 
-        ArrayList<Integer> friends;
-        if (from == -1){
+        ArrayList<Integer> friends = new ArrayList<Integer>();
+        if (from == -1) {
             friends = serviceTools.FriendTools.getFriends(user_id);
             friends.add(user_id);
         } else {
-            friends = serviceTools.FriendTools.getFriends(from);
+//            friends = serviceTools.FriendTools.getFriends(from);
             friends.add(from);
         }
 

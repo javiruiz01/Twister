@@ -26,7 +26,7 @@ public class MessageTools {
         obj.put("author_id", author_id);
         obj.put("id", getNextSequence("messages_id"));
         obj.put("author", author);
-        obj.put("date", new java.util.GregorianCalendar().getTime());
+        obj.put("date", System.currentTimeMillis());
         obj.put("text", text);
         collection.insert(obj);
 
@@ -58,7 +58,7 @@ public class MessageTools {
         obj.put("author_id", author_id);
         obj.put("id", getNextSequence("comments_id"));
         obj.put("author", author);
-        obj.put("date", new java.util.GregorianCalendar().getTime());
+        obj.put("date", System.currentTimeMillis());
         obj.put("text", text);
         obj.put("message_id", message_id);
 
@@ -149,6 +149,25 @@ public class MessageTools {
                 e.printStackTrace();
             }
         }
+        return result;
+    }
+
+    public static JSONObject removeMessage(int id) {
+        DBCollection collection = BD.Database.getMongoCollection("messages");
+
+        BasicDBObject obj = new BasicDBObject();
+
+        obj.put("id", id);
+
+        collection.remove(obj);
+
+        JSONObject result = new JSONObject();
+        try {
+            result.put("code", 200).put("message", "removed");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         return result;
     }
 }
