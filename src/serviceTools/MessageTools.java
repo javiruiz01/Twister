@@ -55,6 +55,8 @@ public class MessageTools {
 
         BasicDBObject obj = new BasicDBObject();
 
+
+
         obj.put("author_id", author_id);
         obj.put("id", getNextSequence("comments_id"));
         obj.put("author", author);

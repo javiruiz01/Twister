@@ -1,24 +1,27 @@
 function init() {
     noConnection = false; // Cad, on parlera avec le serveur
     env = new Object();
-    $("body").on("appear", function (event, $affected) {
-        $.clear_append();
-        completeMessage();
-    });
     env.msgs = new Set();
     env.authors = new Set();
     env.photo = "./web/default_profile.png";
     env.id_max = 0;
-    env.id_min = 0;
+    env.id_min = 255;
     env.selected_twist = 0;
-    env.on_display_user = 0;
+    env.on_display_user = -1;
 }
+
+// $(".twists-stream").appear();
+// $(".twists-stream").on("appear", function (event, $affected) {
+//     console.log("[APPEAR] = " + env.on_display_user + " | " + env.id_max + " | " + env.id_min);
+//     refreshMessages(env.on_display_user, env.id_max, env.id_min);
+// });
 
 $(document).ready(function () {
     $(document).ajaxStart(function () {
-        $("#loading").show();
+        $("#loader").show();
     }).ajaxStop(function () {
-        $("#loading").hide();
+        console.log("Hiding");
+        $("#loader").hide();
     });
 });
 
@@ -46,12 +49,24 @@ function msg(id, author, name, lastname, author_id, text, date, comments) {
         else {
             remove_button = "";
         }
+        if ((now < 0) || (now == 0) || (isNaN(now))) {
+            now = "Just now";
+        } else {
+            if ((now > 0) && (now < 60)) {
+                now = now + "m";
+            }
+            if ((now >= 60) && (now < 1440)) {
+                now = Math.floor((now/60)) + "h";
+            } else if (now >= 1440) {
+                now = Math.floor((now/60)/24) + "d";
+            }
+        }
         var msg_html =
             "<div class=\"twist\" id=\"" + this.id + "\">" +
             "   <div class=\"message-header\">" +
             "       <a class=\"username\" id=\"" + this.id + "\" action=\"javascript:(function(){})()\" onclick=\"getUserPanelFromMessages(this.id)\">" + this.name + " " + this.lastname + "</a>" +
             "       <small class=\"login\"> @" + this.author + "</small>" +
-            "       <small class=\"time\"> " + now + "m</small>" +
+            "       <small class=\"time\"> " + now + "</small>" +
             remove_button +
             "   </div>" +
             "   <div class=\"message-content\">" +
@@ -329,11 +344,11 @@ function makeMainPanel() {
         "           </div>" +
         "       </div>" +
         "   </div>" +
-        "   <footer>" +
-        "       <div class=\"footer_wrapper\">" +
-        "          <p class=\"love\">Made with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
-        "       </div>" +
-        "   </footer>" +
+        // "   <footer>" +
+        // "       <div class=\"footer_wrapper\">" +
+        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        // "       </div>" +
+        // "   </footer>" +
         "</div>";
     $("body").html(html);
     getInitialMessages();
@@ -415,6 +430,12 @@ function getInitialMessagesResponse(rep) {
             }
         }
         console.log("Printing messages");
+        // var old_messages = $(".twists-stream");
+        // if (old_messages.length == 0) {
+        //     $(".twists-stream").html(html);
+        // } else {
+        //     $(".twists-stream").append(html);
+        // }
         $(".twists-stream").html(html);
         console.log("Messages available");
     }
@@ -493,27 +514,48 @@ function showComments(twist_id, name, lastname, date) {
     console.log("Printing comments.");
     var d = Date.now();
     console.log("Date now = " + d);
-    var minutes = Math.floor((d - parseInt(env.msgs[twist_id].date_)) / 60000);
-    console.log("MINUTES = " + minutes);
+    var now = Math.floor((d - parseInt(env.msgs[twist_id].date_)) / 60000);
+    if ((now < 0) || (now == 0) || (isNaN(now))) {
+        now = "Just now";
+    } else {
+        if ((now > 0) && (now < 60)) {
+            now = now + "m";
+        }
+        if ((now >= 60) && (now < 1440)) {
+            now = Math.floor((now/60)) + "h";
+        } else if (now >= 1440) {
+            now = Math.floor((now/60)/24) + "d";
+        }
+    }
     var html_twist =
         "<div class=\"message-header\">" +
         "   <a class=\"username\" action=\"javascript:(function(){})()\" id=\"" + env.selected_twist + "\" onclick=\"getUserPanelFromMessages(this.id)\">" + env.msgs[env.selected_twist].author + "</a>" +
-        "   <small class=\"time\"> " + minutes + "m</small>" +
+        "   <small class=\"time\"> " + now + "</small>" +
         "</div>" +
         "<div class=\"message-content\">" +
         "   <p>" + env.msgs[twist_id].text + "</p>" +
         "</div>";
-    // $(".twist-for-comment").html(html_twist);
     console.log("Fetching comments from environment");
-    // var html_comment = "";
     for (var i = 0; i < env.msgs[twist_id].comments.length; i++) {
         d = Date.now();
-        minutes = Math.floor((d - parseInt(env.msgs[twist_id].comments[i].date)) / 60000);
+        now = Math.floor((d - parseInt(env.msgs[twist_id].comments[i].date)) / 60000);
+        if ((now < 0) || (now == 0) || (isNaN(now))) {
+            now = "Just now";
+        } else {
+            if ((now > 0) && (now < 60)) {
+                now = now + "m";
+            }
+            if ((now >= 60) && (now < 1440)) {
+                now = Math.floor((now/60)) + "h";
+            } else if (now >= 1440) {
+                now = Math.floor((now/60)/24) + "d";
+            }
+        }
         html_twist +=
             "<div class=\"comment\" id=\"comment" + env.msgs[twist_id].comments[i].id + "\">" +
             "   <div class=\"message-header\">" +
             "       <a class=\"comment-username\" id=\"" + env.msgs[twist_id].comments[i].author_id + "\" action=\"javascript:(function(){})()\" onclick=\"getUserPanel(this.id)\"> @" + env.msgs[twist_id].comments[i].author + "</a>" +
-            "       <small class=\"time\"> " + minutes + "m</small>" +
+            "       <small class=\"time\"> " + now + "</small>" +
             "   </div>" +
             "   <div class=\"comment-content\">" +
             "       <p>" + env.msgs[twist_id].comments[i].text + "</p>" +
@@ -625,7 +667,7 @@ function getUserPanelFromMessages(id) {
         "                   <img class=\"dashboard-left-image\" id=\"" + env.msgs[id].author_id + "\"src=\"" + profile_photo + "\" onclick=\"getUserPanel(this.id)\">" +
         "               </a>" +
         "               <div class=\"dashboard-left-user-info\">" +
-        "                   <a class=\"user-name\" action=\"javascript:(function(){})()\" onclick=\"getUserPanel(this)\">" + env.msgs[parseInt(id)].name + " " + env.msgs[parseInt(id)].lastname + "</a>" +
+        "                   <a class=\"user-name\" action=\"javascript:(function(){})()\" onclick=\"getUserPanel(this)\">" + env.msgs[parseInt(id)].author + " " + env.msgs[parseInt(id)].lastname + "</a>" +
         "                   <span class=\"user-login\">@" + env.msgs[parseInt(id)].author + "</span>" +
         "               </div>" +
         html_button_follow +
@@ -661,6 +703,11 @@ function getUserPanelFromMessages(id) {
         "           </div>" +
         "       </div>" +
         "   </div>" +
+        // "   <footer>" +
+        // "       <div class=\"footer_wrapper\">" +
+        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        // "       </div>" +
+        // "   </footer>" +
         "</div>";
     $("body").html(html);
     console.log("[GET USER PANEL] -> key=" + env.key + "&from=" + env.msgs[id].author_id + "&id_max=" + "-1" + "&id_min=" + "-1&nb=10");
@@ -744,6 +791,11 @@ function getUserPanel(author_id) {
         "           </div>" +
         "       </div>" +
         "   </div>" +
+        // "   <footer>" +
+        // "       <div class=\"footer_wrapper\">" +
+        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        // "       </div>" +
+        // "   </footer>" +
         "</div>";
     $("body").html(html);
     console.log("[GET USER PANEL] -> key=" + env.key + "&from=" + author_id + "&id_max=" + "-1" + "&id_min=" + "-1&nb=10");
@@ -830,3 +882,11 @@ function removeMessageResponse(rep, message_id) {
         makeMainPanel();
     }
 }
+
+/*APPEAR*/
+// $(window).scroll(function() {
+//     if($(window).scrollTop() + $(window).height() == $(document).height()) {
+//         console.log("Scroll function");
+//         refreshMessages(env.on_display_user, env.id_max, env.id_min);
+//     }
+// });

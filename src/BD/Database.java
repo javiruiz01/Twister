@@ -62,6 +62,26 @@ public class Database {
         }
         DB db = m.getDB(MongoDBStatic.database);
 //            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
+        System.out.println("Getting collectin from: " + MongoDBStatic.host + ":" + MongoDBStatic.port + ":" + MongoDBStatic.database);
+        collection = db.getCollection(collection_name);
+        return collection;
+    }
+
+    public static DBCollection _getMongoCollection(String collection_name) {
+        DBCollection collection;
+        if (m == null) {
+            try {
+                m = new Mongo(MongoDBStatic.host, MongoDBStatic.port);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }
+        DB db = m.getDB(MongoDBStatic.database);
+//        System.out.println("[USER] = " + MongoDBStatic.user + " [PASSWD] = " + MongoDBStatic.passwd);
+//        Boolean auth = db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
+//        if (!auth) {
+//            System.out.println("WROOONG");
+//        }
         collection = db.getCollection(collection_name);
         return collection;
     }

@@ -383,6 +383,7 @@ input.follow_user_button:hover {
     animation: spin 2s linear infinite;
     margin: auto;
     margin-top: 14px;
+    margin-bottom: 14px;
 }
 
 @keyframes spin {
@@ -409,7 +410,7 @@ input.remove_button_msg:hover {
 
 /*Footer*/
 footer {
-    position: absolute;
+    position: fixed;
     right: 0;
     bottom: 0;
     left: 0;
