@@ -16,7 +16,7 @@ import java.io.PrintWriter;
  */
 public class AddComment extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();
 

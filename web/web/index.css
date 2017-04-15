@@ -97,18 +97,6 @@ input#logout:hover {
     background-color: #357ae8;
 }
 
-input#search {
-    margin-left:200px;
-    border-radius: 5px; /*21*/
-    width: 38%;
-}
-
-input#search:hover {
-    border: 1px solid #b9b9b9;
-    border-top: 1px solid #a0a0a0;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
-}
-
 input[type="submit"] {
     background-color: #009EF6;
     height: 50px;
@@ -125,6 +113,31 @@ input[type="submit"]:hover {
     text-shadow: 0 1px rgba(0,0,0,0.3);
     background-color: #009EF6;
 }
+
+input#search {
+    /*margin-left:200px;*/
+    margin-left: 17%;
+    border-radius: 5px; /*21*/
+    width: 18%;
+}
+
+input#search:hover {
+    border: 1px solid #b9b9b9;
+    border-top: 1px solid #a0a0a0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+input#searchMsgs {
+  width: 18%;
+}
+
+input#searchMsgs:hover {
+    border: 1px solid #b9b9b9;
+    border-top: 1px solid #a0a0a0;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+
 
 img.avatar-circle {
     border-radius: 50%;
@@ -417,4 +430,15 @@ footer {
     padding: 1rem;
     background-color: white;
     text-align: center;
+}
+
+/*List friends*/
+#friend {
+	position: relative;
+}
+
+a.potential_friend {
+	position: absolute;
+	top: 50%;
+	text-align: center;
 }

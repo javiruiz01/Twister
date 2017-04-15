@@ -25,19 +25,24 @@ public class GetMessagesService {
             if (!serviceTools.UserTools.userExistsFromId(from))
                 return serviceTools.ErrorTools.serviceRefusedList("User does not exist", 2);
         }
-        if (query == null)
-            System.out.println("Continuing without query, no problem");
 
-        ArrayList<Integer> friends = new ArrayList<Integer>();
-        if (from == -1) {
-            friends = serviceTools.FriendTools.getFriends(user_id);
-            friends.add(user_id);
+        JSONArray result = new JSONArray();
+
+        if (query != null) {
+            result = service.message.SearchMessageService.MapReduce(query);
         } else {
-//            friends = serviceTools.FriendTools.getFriends(from);
-            friends.add(from);
-        }
+            ArrayList<Integer> friends = new ArrayList<Integer>();
+            if (from == -1) {
+                friends = serviceTools.FriendTools.getFriends(user_id);
+                friends.add(user_id);
+            } else {
+                //            friends = serviceTools.FriendTools.getFriends(from);
+                friends.add(from);
+            }
 
-        JSONArray result = serviceTools.MessageTools.ListFriendMessages(friends, id_max, id_min, nb);
+            result = serviceTools.MessageTools.ListFriendMessages(friends, id_max, id_min, nb);
+            return result;
+        }
         return result;
     }
 }

@@ -55,14 +55,23 @@ public class MessageTools {
 
         BasicDBObject obj = new BasicDBObject();
 
-
-
         obj.put("author_id", author_id);
         obj.put("id", getNextSequence("comments_id"));
         obj.put("author", author);
         obj.put("date", System.currentTimeMillis());
         obj.put("text", text);
         obj.put("message_id", message_id);
+
+        JSONObject userInfo = serviceTools.UserTools.getUserInfo(author_id);
+        try {
+            System.out.println("Hello, my name is: " + userInfo.get("name"));
+            obj.put("name", userInfo.get("name"));
+            System.out.println("Hello, my last name is: " + userInfo.get("lastName"));
+            obj.put("lastname", userInfo.get("lastName"));
+        } catch (JSONException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
 
         BasicDBObject comment = new BasicDBObject("comments", obj);
 

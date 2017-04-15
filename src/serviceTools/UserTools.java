@@ -220,7 +220,8 @@ public class UserTools {
                 try {
                     result.put("name", rs.getString("name"))
                             .put("lastName", rs.getString("lastName"))
-                            .put("login", rs.getString("login"));
+                            .put("login", rs.getString("login"))
+                            .put("id", id_user);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

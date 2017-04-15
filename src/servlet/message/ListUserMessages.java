@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * Created by jruiz on 2/8/17.
- */
+
 public class ListUserMessages extends HttpServlet {
 
-    public void doGet (HttpServletRequest req, HttpServletResponse resp)
+    private static final long serialVersionUID = 1L;
+
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         resp.setContentType("text/json");

@@ -13,10 +13,10 @@ import java.io.PrintWriter;
 /**
  * Created by jruiz on 2/2/17.
  */
-public class AddFriend extends HttpServlet{
+public class AddFriend extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         resp.setContentType("text/json");
         PrintWriter out = resp.getWriter();

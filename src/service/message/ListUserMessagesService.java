@@ -8,7 +8,7 @@ import org.json.JSONException;
  */
 public class ListUserMessagesService {
 
-    public static JSONArray ListUserMessage (String key) {
+    public static JSONArray ListUserMessage(String key) {
 
         if (key == null)
             return serviceTools.ErrorTools.serviceRefusedList("Wrong arguments", 0);

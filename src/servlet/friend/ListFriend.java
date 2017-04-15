@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 /**
  * Created by jruiz on 2/7/17.
  */
-public class ListFriend extends HttpServlet{
+public class ListFriend extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {

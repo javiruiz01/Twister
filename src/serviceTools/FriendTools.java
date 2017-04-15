@@ -88,10 +88,10 @@ public class FriendTools {
         return result;
     }
 
-    public static JSONArray createListFriendsId (ArrayList<Integer> friends) {
+    public static JSONArray createListFriendsId(ArrayList<Integer> friends) {
         JSONArray friends_json = new JSONArray();
 
-        for (Object friend: friends) {
+        for (Object friend : friends) {
             try {
                 JSONObject friend_json = new JSONObject().put("id", friend);
                 friends_json.put(friend_json);
@@ -102,7 +102,7 @@ public class FriendTools {
         return friends_json;
     }
 
-    public static JSONObject createObjectFriendsId (ArrayList<Integer> friends) {
+    public static JSONObject createObjectFriendsId(ArrayList<Integer> friends) {
         JSONObject friends_json = null;
         try {
             friends_json = new JSONObject().put("id", friends);

@@ -21,7 +21,6 @@ public class RemoveFriendService {
             return serviceTools.ErrorTools.serviceRefused("Utilisateur " + from + " n'est pas connecté", 1);
 
 
-
         // On voit si la personne de qui on veut etre ami existe
         if (!serviceTools.UserTools.userExists(to))
             return serviceTools.ErrorTools.serviceRefused("User " + to + " inconnu", 2);

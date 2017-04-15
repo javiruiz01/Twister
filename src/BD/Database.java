@@ -62,7 +62,6 @@ public class Database {
         }
         DB db = m.getDB(MongoDBStatic.database);
 //            db.authenticate(MongoDBStatic.user, MongoDBStatic.passwd.toCharArray());
-        System.out.println("Getting collectin from: " + MongoDBStatic.host + ":" + MongoDBStatic.port + ":" + MongoDBStatic.database);
         collection = db.getCollection(collection_name);
         return collection;
     }

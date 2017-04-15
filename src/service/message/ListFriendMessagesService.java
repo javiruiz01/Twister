@@ -23,7 +23,7 @@ public class ListFriendMessagesService {
         ArrayList<Integer> friends = serviceTools.FriendTools.getFriends(user_id);
         friends.add(user_id);
 
-        JSONArray result = serviceTools.MessageTools.ListFriendMessages(friends, id_max, id_min, nb );
+        JSONArray result = serviceTools.MessageTools.ListFriendMessages(friends, id_max, id_min, nb);
 
         return result;
     }

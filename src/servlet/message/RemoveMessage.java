@@ -9,13 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- * Created by jruiz on 4/9/17.
- */
-public class RemoveMessage extends HttpServlet{
+public class RemoveMessage extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();

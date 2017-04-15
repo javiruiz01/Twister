@@ -16,7 +16,7 @@ import java.io.PrintWriter;
 public class GetMessages extends HttpServlet {
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
         resp.setContentType("text/plain");
         PrintWriter out = resp.getWriter();
