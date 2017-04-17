@@ -215,6 +215,7 @@ input.new_tweet {
 div.twists-stream {
     border: 1px;
     position: relative;
+    padding-bottom: 30px;
 }
 
 .time {
@@ -404,6 +405,7 @@ input.follow_user_button:hover {
     100% { transform: rotate(360deg); }
 }
 
+
 /*Remove button*/
 input.remove_button_msg {
     float: right;
@@ -441,4 +443,9 @@ a.potential_friend {
 	position: absolute;
 	top: 50%;
 	text-align: center;
+}
+
+/*More messages*/
+input.follow_user_button#more {
+    margin-bottom: 100px;
 }

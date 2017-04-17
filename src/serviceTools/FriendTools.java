@@ -116,9 +116,11 @@ public class FriendTools {
         JSONArray result = new JSONArray();
         try {
             Connection conn = BD.Database.getMySQLConnection();
-            String query = "SELECT id FROM USER WHERE name LIKE ?";
+            String query = "SELECT id FROM USER WHERE (name LIKE ?) OR (lastName LIKE ?) OR (login LIKE ?)";
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, login);
+            st.setString(2, login);
+            st.setString(3, login);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 JSONObject userInfo = serviceTools.UserTools.getUserInfo(rs.getInt("id"));

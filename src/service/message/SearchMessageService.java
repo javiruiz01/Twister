@@ -61,35 +61,10 @@ public class SearchMessageService {
                         "  return v;" +
                         "}";
 
-		/*
-		String map =
-				"function() {" +
-				"  var text = \"" + query + "\";" +
-				"  var id = this.id;" +
-				"  var words = text.match(/\\w+/g);" +
-				"  var tf = {};" +
-				"  for (var i = 0; i < words.length; i++) {" +
-				"    if (tf[words[i]] == null) {" +
-				"      tf[words[i]] = 1;" +
-				"    } else {" +
-				"      tf[words[i]] += 1;" +
-				"    }" +
-				"  }" +
-				"  for (w in tf) {" +
-				"    emit(w, 1);" +
-				"  }" +
-				"}";
-		*/
-        String _reduce =
-                "function(k, v) {" +
-                        "  db.result.save(v);" +
-                        "  return null;" +
-                        "}";
-
         DBCollection collection = BD.Database.getMongoCollection("messages");
 
         MapReduceCommand cmd = new MapReduceCommand(collection, map, reduce, "out", MapReduceCommand.OutputType.REPLACE, null);
-        cmd.setFinalize(finalize);
+//        cmd.setFinalize(finalize);
         BasicDBObject obj = new BasicDBObject();
         obj.put("N", collection.count());
         cmd.setScope(obj);

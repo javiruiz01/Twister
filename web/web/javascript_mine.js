@@ -292,6 +292,7 @@ function makeMainPanel() {
     if (env.login == "jruiz") {
         env.photo = "./web/0ZfOasx5_bigger.jpg";
     }
+    env.on_display_user = -1;
     var html =
         "<header>" +
         "   <div class=\"wrapper\">" +
@@ -345,12 +346,13 @@ function makeMainPanel() {
         "           </div>" +
         "       </div>" +
         "   </div>" +
-        // "   <footer>" +
-        // "       <div class=\"footer_wrapper\">" +
-        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
-        // "       </div>" +
-        // "   </footer>" +
+        "   <footer>" +
+        "       <div class=\"footer_wrapper\">" +
+        "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        "       </div>" +
+        "   </footer>" +
         "</div>";
+
     $("body").html(html);
     getInitialMessages();
     console.log("Body is now the main panel.")
@@ -406,15 +408,22 @@ function getInitialMessages() {
 function getInitialMessagesResponse(rep) {
     console.log("Testing for errors in response from server with the messages");
     if (rep.error == undefined) {
+        var counter = 0;
         console.log("No apparent errors, setting up messages");
         console.log(rep);
         var html = '';
+        env.id_max = 0;
+        env.id_min = 255;
+        if (rep.length == 0) {
+            html =
+                "<div class=\"twist\" id=\"zero\">" +
+                "   <p style='text-align: center; color: #009EF6'>*There are no more messages available at this moment*</p>" +
+                "</div>"
+            ;
+        }
         for (var i = 0; i < rep.length; i++) {
             var obj = rep[i];
             console.log("OBJ.MESSAGE_ID = " + obj.message_id);
-            if (obj.message_id == undefined) {
-                continue; // TODO: Erase this when all the messages have ids
-            }
             if (parseInt(obj.message_id) > env.id_max) {
                 env.id_max = obj.message_id;
             }
@@ -442,14 +451,39 @@ function getInitialMessagesResponse(rep) {
                 html += env.msgs[obj.message_id].getHtml();
             }
         }
+        // for (var single_msg in env.msgs) {
+        //     if (counter == 10) {
+        //         break;
+        //     }
+        //     if (env.on_display_user == -1) {
+        //         counter += 1;
+        //         var single_msg_html = env.msgs[single_msg].getHtml();
+        //         html = single_msg_html + html;
+        //     } else {
+        //         console.log(env.msgs[single_msg].author_id);
+        //         if (env.msgs[single_msg].author_id == env.on_display_user) {
+        //             counter += 1;
+        //             var single_msg_html = env.msgs[single_msg].getHtml();
+        //             html = single_msg_html + html;
+        //         } else {
+        //             continue;
+        //         }
+        //     }
+        // }
         console.log("Printing messages");
-        /*var old_messages = $(".twists-stream");
-         if (old_messages.length == 0) {
-         $(".twists-stream").html(html);
-         } else {
-         $(".twists-stream").append(html);
-         }*/
-        $(".twists-stream").html(html);
+        var old_messages = $(".twists-stream").html();
+        console.log(old_messages.length);
+        if (old_messages.length == 60) {
+            console.log("Creating html for messages from scratch");
+            $(".twists-stream").html(html);
+        } else {
+            console.log("Appending new html");
+            $(".twists-stream").append(html);
+        }
+        if ($(".follow_user_button#more").html() == undefined) {
+            $(".twists-stream").after("<input class=\"follow_user_button\" id=\"more\" type=\"submit\" value=\"I want to see more\" action=\"javascript:(function(){})()\" onclick=\"refreshMessages(env.on_display_user, env.id_max, env.id_min)\">");
+        }
+        // $(".twists-stream").html(html);
         console.log("Messages available");
     }
 }
@@ -506,12 +540,12 @@ function newTwistResponse(rep) {
 }
 
 function refreshMessages(from, id_max, id_min) {
-    console.log("[REFRESH MESSAGES] -> " + "key=" + env.key + "&from=" + from + "&id_max=" + id_max + "&id_min=" + id_min + "&nb=10");
+    console.log("[REFRESH MESSAGES] -> " + "key=" + env.key + "&from=" + from + "&id_max=" + id_min + "&id_min=-1&nb=10");
     $.ajax({
         type: "GET",
         url: "messages",
         dataType: "json",
-        data: "key=" + env.key + "&from=" + from + "&id_max=" + id_max + "&id_min=" + id_min + "&nb=10",
+        data: "key=" + env.key + "&from=" + from + "&id_max=" + id_min + "&id_min=-1&nb=10",
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("ERROR:\n" + JSON.stringify(jqXHR));
             console.log("AJAX Error: " + textStatus + ":" + errorThrown);
@@ -589,7 +623,7 @@ function newComment() {
 
 function newCommentError(message) {
     console.log(message);
-    console.log("[ERROR] = " + code);
+    // console.log("[ERROR] = " + code);
     var html =
         "<div id=\"newCommentError\" style=\"color: red;\">" +
         "   <p>" + message + "</p>" +
@@ -658,7 +692,7 @@ function getUserPanelFromMessages(id) {
     } else {
         profile_photo = "./web/default_profile.png";
     }
-
+    env.on_display_user = env.msgs[parseInt(id)].author_id;
     if (env.msgs[parseInt(id)].author_id != env.id) {
         if (!env.follows.has(env.msgs[parseInt(id)].author_id)) {
             var html_button_follow =
@@ -729,11 +763,11 @@ function getUserPanelFromMessages(id) {
         "           </div>" +
         "       </div>" +
         "   </div>" +
-        // "   <footer>" +
-        // "       <div class=\"footer_wrapper\">" +
-        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
-        // "       </div>" +
-        // "   </footer>" +
+        "   <footer>" +
+        "       <div class=\"footer_wrapper\">" +
+        "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        "       </div>" +
+        "   </footer>" +
         "</div>";
     $("body").html(html);
     console.log("[GET USER PANEL] -> key=" + env.key + "&from=" + env.msgs[id].author_id + "&id_max=" + "-1" + "&id_min=" + "-1&nb=10");
@@ -747,7 +781,7 @@ function getUserPanel(author_id) {
     } else {
         profile_photo = "./web/default_profile.png";
     }
-
+    env.on_display_user = author_id;
     if (author_id != env.id) {
         if (!env.follows.has(parseInt(author_id))) {
             var html_button_follow =
@@ -818,11 +852,11 @@ function getUserPanel(author_id) {
         "           </div>" +
         "       </div>" +
         "   </div>" +
-        // "   <footer>" +
-        // "       <div class=\"footer_wrapper\">" +
-        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
-        // "       </div>" +
-        // "   </footer>" +
+        "   <footer>" +
+        "       <div class=\"footer_wrapper\">" +
+        "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        "       </div>" +
+        "   </footer>" +
         "</div>";
     $("body").html(html);
     console.log("[GET USER PANEL] -> key=" + env.key + "&from=" + author_id + "&id_max=" + "-1" + "&id_min=" + "-1&nb=10");
@@ -986,11 +1020,11 @@ function searchFriendsResponse(rep) {
         "           </div>" +
         "       </div>" +
         "   </div>" +
-        // "   <footer>" +
-        // "       <div class=\"footer_wrapper\">" +
-        // "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
-        // "       </div>" +
-        // "   </footer>" +
+        "   <footer>" +
+        "       <div class=\"footer_wrapper\">" +
+        "          <p class=\"love\">Crafted with &hearts; by <a class=\"github_user\" href=\"https://github.com/javiruiz01\">Javier Ruiz Calle</a></p>" +
+        "       </div>" +
+        "   </footer>" +
         "</div>";
     $("body").html(html);
     if (rep.error == undefined) {

@@ -126,10 +126,15 @@ public class MessageTools {
         query.put("$or", list);
         if (id_max != -1 || id_min != -1) {
             BasicDBObject delimiter = new BasicDBObject();
-            if (id_max != -1)
-                delimiter.put("$lte", id_max);
-            if (id_min != -1)
-                delimiter.put("$gte", id_min);
+            if (id_max != -1) {
+                delimiter.put("$lt", id_max);
+//                query.put("id", delimiter);
+            }
+//            delimiter = new BasicDBObject();
+            if (id_min != -1) {
+                delimiter.put("$gt", id_min);
+//                query.put("id", delimiter);
+            }
             query.put("id", delimiter);
         }
 
