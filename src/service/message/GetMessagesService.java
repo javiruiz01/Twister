@@ -41,7 +41,6 @@ public class GetMessagesService {
                 friends = serviceTools.FriendTools.getFriends(user_id);
                 friends.add(user_id);
             } else {
-                //            friends = serviceTools.FriendTools.getFriends(from);
                 friends.add(from);
             }
 

@@ -43,7 +43,7 @@ public class AddFriendService {
         if (!serviceTools.FriendTools.insertFriend(from_id, to_id))
             return serviceTools.ErrorTools.serviceRefused("Something went wrong while adding your new friend", 5);
 
-        return serviceTools.ErrorTools.serviceRefused("A wild error appeared", 100);
-//        return serviceTools.ErrorTools.serviceAcceptedEmpty();
+//        return serviceTools.ErrorTools.serviceRefused("A wild error appeared", 100);
+        return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }
 }

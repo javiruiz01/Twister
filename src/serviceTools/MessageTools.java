@@ -64,9 +64,7 @@ public class MessageTools {
 
         JSONObject userInfo = serviceTools.UserTools.getUserInfo(author_id);
         try {
-            System.out.println("Hello, my name is: " + userInfo.get("name"));
             obj.put("name", userInfo.get("name"));
-            System.out.println("Hello, my last name is: " + userInfo.get("lastName"));
             obj.put("lastname", userInfo.get("lastName"));
         } catch (JSONException e1) {
             // TODO Auto-generated catch block

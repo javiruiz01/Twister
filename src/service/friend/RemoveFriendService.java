@@ -16,6 +16,11 @@ public class RemoveFriendService {
 
         int from_id = serviceTools.UserTools.getIdUser(from);
 
+        if (!serviceTools.UserTools.shouldBeConnected(from_id)) {
+            serviceTools.UserTools.deleteConnection(key);
+            return serviceTools.ErrorTools.serviceRefused("User should not be connected", 100);
+        }
+
         // On doit voir si l'utilisateur est connecté ou pas
         if (!serviceTools.UserTools.userConnect(from_id))
             return serviceTools.ErrorTools.serviceRefused("User " + from + " is not connected", 1);

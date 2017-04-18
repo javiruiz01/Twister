@@ -18,6 +18,7 @@ public class LoginService {
             return serviceTools.ErrorTools.serviceRefused("The username and password you entered did not match our records. Please double-check and try again.", 2);
 
         int id_user = serviceTools.UserTools.getIdUser(login);
+
         if (id_user < 0)
             return serviceTools.ErrorTools.serviceRefused("Error while connecting to the database. We apologize.", 4);
 

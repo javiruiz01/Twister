@@ -244,10 +244,6 @@ function errorLoginForm(errorMessage, code) {
     } else {
         oldMessage.replace(html);
     }
-    if (code == 3) {
-        html +=
-            ""
-    }
 }
 
 function loginConnection(login, passwd) {
@@ -268,6 +264,7 @@ function loginConnection(login, passwd) {
 
 function loginConnectionResponse(rep) {
     console.log("Handling Login response");
+    console.log(rep);
     if (rep.error == undefined) {
         console.log("No error, setting environnement variables");
         env.id = rep.id;
@@ -379,6 +376,7 @@ function logoutResponse(rep) {
     if (rep.error == undefined) {
         console.log("No error, returning to login screen");
         makeLoginPanel();
+        init();
     } else {
         errorLogout(rep.error, rep.code);
     }
@@ -540,9 +538,10 @@ function newTwistConnection(text) {
 function newTwistResponse(rep) {
     console.log("Handling response from server");
     if (rep.error == undefined) {
+        console.log(rep);
         env.id_max = rep.message_id;
         makeMainPanel();
-        refreshMessages("-1", env.id_max, env.id_min);
+        // refreshMessages("-1", env.id_max, env.id_min);
     } else {
         newTwistFormError(rep);
     }
@@ -665,6 +664,7 @@ function newCommentConnection(text) {
 
 function newCommentResponse(rep) {
     console.log("Creating html for new comment");
+    console.log(rep);
     if (rep.error == undefined) {
         var d = new Date();
         var now = Math.floor((d - parseInt(rep.date)) / 60000);
@@ -1130,8 +1130,9 @@ function searchMessagesResponse(rep) {
     $(".twists-stream").empty();
     getInitialMessagesResponse(rep);
     $(".follow_user_button").empty();
-}
+    // console.log(rep);
+};
 
 $(window).unload(function () {
     logout();
-})
+});

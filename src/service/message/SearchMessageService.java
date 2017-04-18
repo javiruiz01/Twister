@@ -41,15 +41,14 @@ public class SearchMessageService {
 
         String reduce =
                 "function(k, v) {" +
-                        "  v = v.split(\",\")" +
                         "  var df = v.lenth;" +
-                        "  var ret = [];" +
+                        "  var ret = {};" +
                         "  for (value in v) {" +
                         "    for (k in v[value]) {" +
                         "      ret[k] = v[value][k];" +
                         "    }" +
                         "  }" +
-                        "  return ret.toString();" +
+                        "  return ret;" +
                         "}";
 
         String finalize =
@@ -88,6 +87,7 @@ public class SearchMessageService {
         */
         JSONArray result = new JSONArray();
         for (DBObject o : out.results()) {
+            System.out.println(o.toString());
             try {
                 JSONObject message = new JSONObject(JSON.serialize(o));
                 result.put(message);

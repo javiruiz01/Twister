@@ -78,15 +78,15 @@ public class UserTools {
         boolean result = false;
         try {
             Connection conn = BD.Database.getMySQLConnection();
-            // Si on veut chiffrer, faudra descomentar los cambios y cambiar la query
-            String query = "SELECT passwd FROM USER WHERE login = ?";
+            String query = "SELECT * FROM USER WHERE login = ?";
             PreparedStatement st = conn.prepareStatement(query);
             st.setString(1, name);
-//            st.setString(2, password);
             ResultSet rs = st.executeQuery();
-            result = rs.next();
-            if (BCrypt.checkpw(password, rs.getString("passwd")))
-                result = true;
+            while (rs.next()) {
+                String pass = rs.getString("passwd");
+                if (BCrypt.checkpw(password, pass))
+                    result = true;
+            }
             rs.close();
             st.close();
             conn.close();
