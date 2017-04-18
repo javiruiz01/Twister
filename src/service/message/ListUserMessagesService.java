@@ -15,6 +15,11 @@ public class ListUserMessagesService {
 
         int user_id = serviceTools.UserTools.getIdUserFromKey(key);
 
+        if (!serviceTools.UserTools.shouldBeConnected(user_id)) {
+            serviceTools.UserTools.deleteConnection(key);
+            return serviceTools.ErrorTools.serviceRefusedList("User should not be connected", 100);
+        }
+
         JSONArray messages = serviceTools.MessageTools.ListUserMessages(user_id);
 
         return messages;

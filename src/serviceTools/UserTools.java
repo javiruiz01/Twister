@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.mindrot.BCrypt;
 
 import java.sql.*;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
@@ -27,6 +28,31 @@ public class UserTools {
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static Boolean shouldBeConnected(Integer id) {
+        Boolean result = false;
+        Time date = null;
+        try {
+            Connection conn = BD.Database.getMySQLConnection();
+            String query = "SELECT date FROM SESSION WHERE id = ?";
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                date = rs.getTime("date");
+            }
+            st.close();
+            rs.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Long ellapsed_time = date.getTime() - System.currentTimeMillis();
+        if (ellapsed_time < 1.8e+6) {
+            result = true;
         }
         return result;
     }

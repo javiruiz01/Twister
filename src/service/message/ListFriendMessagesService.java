@@ -20,6 +20,11 @@ public class ListFriendMessagesService {
 
         int user_id = serviceTools.UserTools.getIdUserFromKey(key);
 
+        if (!serviceTools.UserTools.shouldBeConnected(user_id)) {
+            serviceTools.UserTools.deleteConnection(key);
+            return serviceTools.ErrorTools.serviceRefusedList("User should not be connected", 100);
+        }
+
         ArrayList<Integer> friends = serviceTools.FriendTools.getFriends(user_id);
         friends.add(user_id);
 

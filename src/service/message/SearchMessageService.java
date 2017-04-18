@@ -64,7 +64,7 @@ public class SearchMessageService {
         DBCollection collection = BD.Database.getMongoCollection("messages");
 
         MapReduceCommand cmd = new MapReduceCommand(collection, map, reduce, "out", MapReduceCommand.OutputType.REPLACE, null);
-//        cmd.setFinalize(finalize);
+        cmd.setFinalize(finalize);
         BasicDBObject obj = new BasicDBObject();
         obj.put("N", collection.count());
         cmd.setScope(obj);

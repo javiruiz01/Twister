@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Twister - Login</title>
+    <link href="index.css" rel="stylesheet" type="text/css"/>
     <link href="login.css" rel="stylesheet" type="text/css"/>
     <link rel="icon" type="image" href="./favicon.ico"/>
 </head>
@@ -10,6 +11,12 @@
     <div class="wrapper-login">
         <div class="login">
             <h1>Log into your account</h1>
+            <div id="errorLogin" style="color: red; text-align: center;">
+                <p>User is already logged in</p>
+                <p>Would you like to close the other session?</p>
+                <input class="comments" value="Yes" type="submit" onclick="logout()"/>
+                <input class="comments" value="No" type="submit" style="margin-bottom: 20px;"/>
+            </div>
             <form class="login-form">
                 <input type="text" name="user-login" placeholder="username">
                 <input type="password" name="user-password" placeholder="password">

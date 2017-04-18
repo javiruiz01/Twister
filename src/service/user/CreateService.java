@@ -18,7 +18,6 @@ public class CreateService {
         if (!serviceTools.UserTools.insertUser(name, lastName, login, email, passwd))
             return serviceTools.ErrorTools.serviceRefused("User could not be inserted", 2);
 
-        // TODO: Changer, on se connecte directement
         return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }
 }

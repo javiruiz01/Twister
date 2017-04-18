@@ -18,23 +18,23 @@ public class RemoveFriendService {
 
         // On doit voir si l'utilisateur est connecté ou pas
         if (!serviceTools.UserTools.userConnect(from_id))
-            return serviceTools.ErrorTools.serviceRefused("Utilisateur " + from + " n'est pas connecté", 1);
+            return serviceTools.ErrorTools.serviceRefused("User " + from + " is not connected", 1);
 
 
         // On voit si la personne de qui on veut etre ami existe
         if (!serviceTools.UserTools.userExists(to))
-            return serviceTools.ErrorTools.serviceRefused("User " + to + " inconnu", 2);
+            return serviceTools.ErrorTools.serviceRefused("User " + to + " is not in our databases", 2);
 
         int to_id = serviceTools.UserTools.getIdUser(to);
         if ((from_id < 0) || (to_id < 0))
-            return serviceTools.ErrorTools.serviceRefused("Erreur dans la BD", 3);
+            return serviceTools.ErrorTools.serviceRefused("Something went wrong with the database", 3);
 
         // On voit s'il ne sont pas amis
         if (!serviceTools.FriendTools.isFriend(from_id, to_id))
             return serviceTools.ErrorTools.serviceRefused("User " + from + " is not friends with " + to, 4);
 
         if (!serviceTools.FriendTools.removeFriend(from_id, to_id))
-            return serviceTools.ErrorTools.serviceRefused("Erreur dans l'elimination de l'ami", 5);
+            return serviceTools.ErrorTools.serviceRefused("Something went wrong while unfollowing your friend", 5);
 
         return serviceTools.ErrorTools.serviceAcceptedEmpty();
     }

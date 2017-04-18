@@ -10,12 +10,6 @@ function init() {
     env.on_display_user = -1;
 }
 
-//$(".twists-stream").appear();
-//$(".twists-stream").on("appear", function (event, $affected) {
-//console.log("[APPEAR] = " + env.on_display_user + " | " + env.id_max + " | " + env.id_min);
-//refreshMessages(env.on_display_user, env.id_max, env.id_min);
-//});
-
 $(document).ready(function () {
     $(document).ajaxStart(function () {
         $("#loader").show();
@@ -91,8 +85,6 @@ function comment(id, author, text, date, msg_id) {
     }
 }
 
-//TODO: Revival function, look up how it works and how to do it properly
-
 function makeRegisterPanel() {
     console.log('Creating register html');
     var html =
@@ -134,8 +126,12 @@ function testRegisterForm(name, lastname, login, email, passwd, re_passwd) {
     result = false;
     if ((name.length <= 0) || (lastname.length <= 0) || (login.length <= 0)
         || (email.length <= 0) || (passwd.length <= 0) || (re_passwd.length <= 0)) {
-        console.log('Error, one of the inputs is empty'); // TODO: End all the tests client-side
+        console.log('Error, one of the inputs is empty');
         errorRegisterForm("Error, one of the inputs is empty");
+    } else if (passwd != re_passwd) {
+        errorRegisterForm("Passwords did not match, please try again");
+    } else if (!(/\S+@\S+/.test(email))) {
+        errorRegisterForm("Please, enter a valid email");
     } else {
         console.log('Register service accepted, sending to server');
         result = true;
@@ -149,11 +145,11 @@ function errorRegisterForm(errorMessage, code) {
         "<div id=\"errorRegister\" style=\"color: red;\">" +
         "   <p>" + errorMessage + "</p>" +
         "</div>";
-    var oldMessage = $("errorRegister");
-    if (oldMessage.length == 0) {
+    var oldMessage = $("#errorRegister").html();
+    if (oldMessage == undefined) {
         $("form").prepend(html);
     } else {
-        oldMessage.replaceWith(html);
+        $("#errorRegister").html(html);
     }
 }
 
@@ -239,14 +235,18 @@ function testLoginForm(login, passwd) {
 function errorLoginForm(errorMessage, code) {
     console.log("[ERROR] = " + code);
     var html =
-        "<div id=\"errorLogin\" style=\"color: red;\">" +
+        "<div id=\"errorLogin\" style=\"color: red; text-align: center;\">" +
         "   <p>" + errorMessage + "</p>" +
         "</div>";
-    var oldMessage = $("errorLogin");
-    if (oldMessage.length == 0) {
+    var oldMessage = $("#errorLogin").html();
+    if (oldMessage == undefined) {
         $("form").prepend(html);
     } else {
-        oldMessage.replaceWith(html);
+        oldMessage.replace(html);
+    }
+    if (code == 3) {
+        html +=
+            ""
     }
 }
 
@@ -297,7 +297,7 @@ function makeMainPanel() {
         "<header>" +
         "   <div class=\"wrapper\">" +
         "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
-        "           <img onclick=\"javascript:getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "           <img onclick=\"javascript:makeMainPanel()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
         "       </a>" +
         "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search for friends...\" onclick=\"searchFriends()\" action=\"javascript:(function(){})()\"/>" +
         "		<input id=\"searchMsgs\" type=\"text\" name=\"Search\" placeholder=\"Search for messages...\" onclick=\"searchMessages()\" action=\"javascript:(function(){})()\"/>" +
@@ -386,6 +386,16 @@ function logoutResponse(rep) {
 
 function errorLogout(message, code) {
     console.log("[ERROR] = " + code + ", " + message);
+    var html =
+        "<div id=\"errorLogout\" style=\"color: red; text-align: center;\">" +
+        "   <p>" + errorMessage + "</p>" +
+        "</div>";
+    var oldMessage = $("#errorLogout").html();
+    if (oldMessage == undefined) {
+        $("#logout").prepend(html);
+    } else {
+        oldMessage.replace(html);
+    }
 }
 
 function getInitialMessages() {
@@ -407,20 +417,23 @@ function getInitialMessages() {
 
 function getInitialMessagesResponse(rep) {
     console.log("Testing for errors in response from server with the messages");
-    if (rep.error == undefined) {
+    console.log(rep);
+    var html = '';
+    if (rep.length == 0) {
+        html =
+            "<div class=\"twist\" id=\"zero\">" +
+            "   <p style='text-align: center; color: #009EF6'>*There are no more messages available at this moment*</p>" +
+            "</div>"
+        ;
+        $(".twists-stream").append(html);
+        return;
+    }
+    if (rep[0].error == undefined) {
         var counter = 0;
         console.log("No apparent errors, setting up messages");
         console.log(rep);
-        var html = '';
         env.id_max = 0;
         env.id_min = 255;
-        if (rep.length == 0) {
-            html =
-                "<div class=\"twist\" id=\"zero\">" +
-                "   <p style='text-align: center; color: #009EF6'>*There are no more messages available at this moment*</p>" +
-                "</div>"
-            ;
-        }
         for (var i = 0; i < rep.length; i++) {
             var obj = rep[i];
             console.log("OBJ.MESSAGE_ID = " + obj.message_id);
@@ -451,25 +464,6 @@ function getInitialMessagesResponse(rep) {
                 html += env.msgs[obj.message_id].getHtml();
             }
         }
-        // for (var single_msg in env.msgs) {
-        //     if (counter == 10) {
-        //         break;
-        //     }
-        //     if (env.on_display_user == -1) {
-        //         counter += 1;
-        //         var single_msg_html = env.msgs[single_msg].getHtml();
-        //         html = single_msg_html + html;
-        //     } else {
-        //         console.log(env.msgs[single_msg].author_id);
-        //         if (env.msgs[single_msg].author_id == env.on_display_user) {
-        //             counter += 1;
-        //             var single_msg_html = env.msgs[single_msg].getHtml();
-        //             html = single_msg_html + html;
-        //         } else {
-        //             continue;
-        //         }
-        //     }
-        // }
         console.log("Printing messages");
         var old_messages = $(".twists-stream").html();
         console.log(old_messages.length);
@@ -483,8 +477,20 @@ function getInitialMessagesResponse(rep) {
         if ($(".follow_user_button#more").html() == undefined) {
             $(".twists-stream").after("<input class=\"follow_user_button\" id=\"more\" type=\"submit\" value=\"I want to see more\" action=\"javascript:(function(){})()\" onclick=\"refreshMessages(env.on_display_user, env.id_max, env.id_min)\">");
         }
-        // $(".twists-stream").html(html);
         console.log("Messages available");
+    } else {
+        console.log("[ERROR] = " + rep[0].code);
+        var html =
+                "<div id=\"errorMessages\" style=\"color: red; text-align: center;\">" +
+                "<p>" + rep[0].error + "</p>" +
+                "</div>"
+            ;
+        var oldMessage = $("#errorMessages").html();
+        if (oldMessage == undefined) {
+            $(".twists-stream").html(html);
+        } else {
+            $("#errorMessafe").html(html);
+        }
     }
 }
 
@@ -497,18 +503,19 @@ function newTwist() {
     newTwistConnection(text);
 }
 
-function newTwistFormError(message) {
-    console.log(message);
-    console.log("[ERROR] = " + code);
+function newTwistFormError(rep) {
+    console.log(rep);
+    console.log("[ERROR] = " + rep.code);
     var html =
-        "<div id=\"newTwistError\" style=\"color: red;\">" +
-        "   <p>" + message + "</p>" +
-        "</div>";
-    var oldMessage = $("errorRegister");
-    if (oldMessage.length == 0) {
-        $(".twists_stream").prepend(html);
+            "<div id=\"errorMessages\" style=\"color: red; text-align: center;\">" +
+            "<p>" + rep.error + "</p>" +
+            "</div>"
+        ;
+    var oldMessage = $("#errorMessages").html();
+    if (oldMessage == undefined) {
+        $(".twists-stream").html(html);
     } else {
-        oldMessage.replaceWith(html);
+        $("#errorMessafe").html(html);
     }
 }
 
@@ -536,6 +543,8 @@ function newTwistResponse(rep) {
         env.id_max = rep.message_id;
         makeMainPanel();
         refreshMessages("-1", env.id_max, env.id_min);
+    } else {
+        newTwistFormError(rep);
     }
 }
 
@@ -617,22 +626,22 @@ function newComment() {
     var text = document.new_comment_form.new_comment_text.value;
     if ((text.length > 140) || (env.selected_twist == 0)) {
         newCommentError("You must first select a comment");
+    } else {
+        newCommentConnection(text);
     }
-    newCommentConnection(text);
 }
 
 function newCommentError(message) {
     console.log(message);
-    // console.log("[ERROR] = " + code);
     var html =
         "<div id=\"newCommentError\" style=\"color: red;\">" +
         "   <p>" + message + "</p>" +
         "</div>";
-    var oldMessage = $("errorComment");
-    if (oldMessage.length == 0) {
-        $(".comments_stream").prepend(html);
+    var oldMessage = $("#newCommentError").html();
+    if (oldMessage == undefined) {
+        $(".twist-for-comment").html(html);
     } else {
-        oldMessage.replaceWith(html);
+        $("#newCommentError").html(html);
     }
 }
 
@@ -656,34 +665,37 @@ function newCommentConnection(text) {
 
 function newCommentResponse(rep) {
     console.log("Creating html for new comment");
-    var d = new Date();
-    var now = Math.floor((d - parseInt(rep.date)) / 60000);
-    if ((now < 0) || (now == 0) || (isNaN(now))) {
-        now = "Just now";
+    if (rep.error == undefined) {
+        var d = new Date();
+        var now = Math.floor((d - parseInt(rep.date)) / 60000);
+        if ((now < 0) || (now == 0) || (isNaN(now))) {
+            now = "Just now";
+        } else {
+            if ((now > 0) && (now < 60)) {
+                now = now + "m";
+            }
+            if ((now >= 60) && (now < 1440)) {
+                now = Math.floor((now / 60)) + "h";
+            } else if (now >= 1440) {
+                now = Math.floor((now / 60) / 24) + "d";
+            }
+        }
+        var html_comment =
+            "<div class=\"comment\" id=\"comment" + env.selected_twist + "\">" +
+            "   <div class=\"message-header\">" +
+            "       <a class=\"comment-username\" id=\"" + rep.author_id + "\" action=\"javascript:(function(){})()\" onclick=\"getUserPanel(this.id)\"> @" + rep.author + "</a>" +
+            "       <small class=\"time\"> " + now + "</small>" +
+            "   </div>" +
+            "   <div class=\"comment-content\">" +
+            "       <p>" + rep.text + "</p>" +
+            "   </div>" +
+            "</div>";
+        env.msgs[env.selected_twist].comments.push(rep);
+        $(".twist-for-comment").append(html_comment);
     } else {
-        if ((now > 0) && (now < 60)) {
-            now = now + "m";
-        }
-        if ((now >= 60) && (now < 1440)) {
-            now = Math.floor((now / 60)) + "h";
-        } else if (now >= 1440) {
-            now = Math.floor((now / 60) / 24) + "d";
-        }
+        newCommentError("Something went wrong while posting your message");
     }
-    var html_comment =
-        "<div class=\"comment\" id=\"comment" + env.selected_twist + "\">" +
-        "   <div class=\"message-header\">" +
-        "       <a class=\"comment-username\" id=\"" + rep.author_id + "\" action=\"javascript:(function(){})()\" onclick=\"getUserPanel(this.id)\"> @" + rep.author + "</a>" +
-        "       <small class=\"time\"> " + now + "</small>" +
-        "   </div>" +
-        "   <div class=\"comment-content\">" +
-        "       <p>" + rep.text + "</p>" +
-        "   </div>" +
-        "</div>";
-    env.msgs[env.selected_twist].comments.push(rep);
-    $(".twist-for-comment").append(html_comment);
 }
-
 
 function getUserPanelFromMessages(id) {
     console.log("Creating user panel");
@@ -713,7 +725,7 @@ function getUserPanelFromMessages(id) {
         "<header>" +
         "   <div class=\"wrapper\">" +
         "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
-        "           <img onclick=\"javascript:makeMainPanel();getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "           <img onclick=\"javascript:makeMainPanel()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
         "       </a>" +
         "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search for friends...\" onclick=\"searchFriends()\" action=\"javascript:(function(){})()\"/>" +
         "		<input id=\"searchMsgs\" type=\"text\" name=\"Search\" placeholder=\"Search for messages...\" onclick=\"searchMessages()\" action=\"javascript:(function(){})()\"/>" +
@@ -802,7 +814,7 @@ function getUserPanel(author_id) {
         "<header>" +
         "   <div class=\"wrapper\">" +
         "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
-        "           <img onclick=\"javascript:makeMainPanel();getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "           <img onclick=\"javascript:makeMainPanel()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
         "       </a>" +
         "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search for friends...\" onclick=\"searchFriends()\" action=\"javascript:(function(){})()\"/>" +
         "		<input id=\"searchMsgs\" type=\"text\" name=\"Search\" placeholder=\"Search for messages...\" onclick=\"searchMessages()\" action=\"javascript:(function(){})()\"/>" +
@@ -866,7 +878,7 @@ function getUserPanel(author_id) {
 function follow(author_id) {
     console.log("[FOLLOW] = " + "key=" + env.key + "&to=" + author_id);
     console.log("Following user with id = " + author_id);
-    author = env.authors[parseInt(author_id)].author
+    author = env.authors[parseInt(author_id)].author;
     $.ajax({
         type: "GET",
         url: "addfriend",
@@ -883,11 +895,28 @@ function follow(author_id) {
 
 function followResponse(rep, author_id) {
     console.log("Response from server received");
-    console.log(rep)
+    console.log(rep);
     if (rep.error == undefined) {
         console.log("Attempting to change buttons value");
         env.follows.add(parseInt(author_id));
         getUserPanel(author_id);
+    } else {
+        followError(rep);
+    }
+}
+
+function followError(rep) {
+    console.log("[ERROR] = " + rep.code);
+    var html =
+        "<div id=\"errorFollow\" style=\"color: red; text-align: center;\">" +
+        "   <p>" + rep.error + "</p>" +
+        "</div>";
+    ;
+    var oldMessage = $("#errorFollow").html();
+    if (oldMessage == undefined) {
+        $(".twists-stream").html(html);
+    } else {
+        $("#errorFollow").html(html);
     }
 }
 
@@ -967,11 +996,15 @@ function searchFriends() {
 function searchFriendsResponse(rep) {
     console.log("Treating search friends request");
     console.log(rep);
+    if (rep.code == 100) {
+        makeLoginPanel();
+        errorLoginForm("You have disconected because you have been absent for more than half an hour", 100)
+    }
     var initial_html =
         "<header>" +
         "   <div class=\"wrapper\">" +
         "       <a class=\"logo\" action=\"javascript:(function(){})()\" >" +
-        "           <img onclick=\"javascript:getInitialMessages()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
+        "           <img onclick=\"javascript:makeMainPanel()\" src=\"./web/logo.png\" alt=\"Twister_logo\" class=\"logo\">" +
         "       </a>" +
         "       <input id=\"search\" type=\"text\" name=\"Search\" placeholder=\"Search for friends...\" onclick=\"searchFriends()\" action=\"javascript:(function(){})()\"/>" +
         "		<input id=\"searchMsgs\" type=\"text\" name=\"Search\" placeholder=\"Search for messages...\" onclick=\"searchMessages()\" action=\"javascript:(function(){})()\"/>" +
@@ -1094,13 +1127,11 @@ function searchMessages() {
 }
 
 function searchMessagesResponse(rep) {
-    console.log(rep);
+    $(".twists-stream").empty();
+    getInitialMessagesResponse(rep);
+    $(".follow_user_button").empty();
 }
 
-/*APPEAR*/
-//$(window).scroll(function() {
-//if($(window).scrollTop() + $(window).height() == $(document).height()) {
-//console.log("Scroll function");
-//refreshMessages(env.on_display_user, env.id_max, env.id_min);
-//}
-//});
+$(window).unload(function () {
+    logout();
+})

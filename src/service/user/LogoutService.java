@@ -12,7 +12,7 @@ public class LogoutService {
     public static JSONObject logout(String key) {
 
         if (key == null)
-            return serviceTools.ErrorTools.serviceRefused("wrong arguments", 0);
+            return serviceTools.ErrorTools.serviceRefused("Wrong arguments", 0);
 
         if (!deleteConnection(key))
             return serviceTools.ErrorTools.serviceRefused("User already disconnected", 2);

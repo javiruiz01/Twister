@@ -168,6 +168,47 @@ public class MessageTools {
         return result;
     }
 
+    public static JSONArray searchMessage(String query) {
+        JSONArray result = new JSONArray();
+        DBCollection collection = BD.Database.getMongoCollection("messages");
+
+//        BasicDBObject search = new BasicDBObject("$text", new BasicDBObject("$search", query));
+//        BasicDBObject score = new BasicDBObject("score", new BasicDBObject("$meta", "textScore"));
+//        BasicDBObject sorting = new BasicDBObject("score", new BasicDBObject("$meta", "textScore"));
+//        DBCursor cursor = collection.find(search, score).sort(sorting);
+
+        String pattern = ".*" + query + "*.";
+        BasicDBObject regex = new BasicDBObject();
+        regex.put("$regex", pattern);
+        regex.put("$options", "i");
+        BasicDBObject obj = new BasicDBObject("text", regex);
+
+        DBCursor cursor = collection.find(obj);
+        cursor.sort(new BasicDBObject("date", -1));
+
+        while (cursor.hasNext()) {
+            DBObject message = cursor.next();
+            try {
+                JSONObject message_json = new JSONObject()
+                        .put("message_id", message.get("id"))
+                        .put("author_id", message.get("author_id"))
+                        .put("author", message.get("author"))
+                        .put("date", message.get("date"))
+                        .put("text", message.get("text"))
+                        .put("score", message.get("score"));
+                if (message.get("comments") != null) {
+                    message_json.put("comments", message.get("coments"));
+                }
+                JSONObject userInfo = serviceTools.UserTools.getUserInfo((Integer) message.get("author_id"));
+                message_json.put("name", userInfo.get("name")).put("lastname", userInfo.get("lastName"));
+                result.put(message_json);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     public static JSONObject removeMessage(int id) {
         DBCollection collection = BD.Database.getMongoCollection("messages");
 

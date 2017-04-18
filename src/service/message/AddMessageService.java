@@ -17,10 +17,9 @@ public class AddMessageService {
 
         int author_id = serviceTools.UserTools.getIdUser(author);
         if (author_id < 0)
-            return serviceTools.ErrorTools.serviceRefused("Erreur dans la BD", 2);
+            return serviceTools.ErrorTools.serviceRefused("Something went wrong with the database", 2);
 
         JSONObject message = serviceTools.MessageTools.createMessageJSON(text, author, author_id);
-
         return message;
     }
 }
